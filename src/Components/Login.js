@@ -1,0 +1,146 @@
+import React, { useContext, useState, useEffect } from "react";
+import { useFormik } from "formik";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import AuthProvider, { authProviderContext } from "../Providers/AuthProvider";
+function Login() {
+  let navigate = useNavigate();
+  const contextValues = useContext(authProviderContext);
+  const [userData, setUserData] = useState([]);
+  useEffect(() => {
+    contextValues.userData();
+  }, []);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        let users = await contextValues.user;
+        let findUser = await users.find((data) => {
+          return (
+            data.email === values.email && data.password === values.password
+          );
+        });
+        if (findUser) {
+          if (findUser.role === "admin") {
+            navigate("/admin/home");
+          } else {
+            alert("your are user");
+          }
+        } else {
+          alert("not valid user");
+        }
+        resetForm();
+      } catch (error) {
+        resetForm();
+        console.log(error, "error");
+      }
+    },
+    validate: (values) => {
+      const errors = {};
+      if (!values.email) {
+        errors.email = "Required";
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errors.email = "Invalid email address";
+      }
+      if (!values.password) {
+        errors.password = "Required";
+      }
+      return errors;
+    },
+  });
+  return (
+    <>
+      <div className="App">
+        <div className="container">
+          <div className="row d-flex justify-content-center login-card-container">
+            <div className="col-md-4">
+              <div className="d-flex justify-content-center">
+                <h4 className="font-weight-bold">LOGIN</h4>
+              </div>
+              <form onSubmit={formik.handleSubmit}>
+                <div className="form-group">
+                  <label className="font-weight-bold">Email :</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    name="email"
+                    placeholder="Enter email"
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
+                  />
+                  {formik.errors.email ? (
+                    <div style={{ color: "red" }}>{formik.errors.email} !</div>
+                  ) : null}
+                </div>
+                <div className="form-group mt-1">
+                  <label className="font-weight-bold">Password:</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    name="password"
+                    placeholder="Password"
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                  />
+                  {formik.errors.password ? (
+                    <div style={{ color: "red" }}>
+                      {formik.errors.password} !
+                    </div>
+                  ) : null}
+                </div>
+                <div className="d-grid mt-2">
+                  <Button
+                    type="submit"
+                    value={"Login"}
+                    style={{
+                      backgroundColor: "#03045e",
+                      color: "#fff",
+                    }}
+                    variant="raised"
+                  >
+                    Login
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+let LoginProvider = () => {
+  return (
+    <AuthProvider>
+      <Login />
+    </AuthProvider>
+  );
+};
+export default LoginProvider;
+// if (user.email === values.email) {
+//   if (user.email === values.password) {
+//     if (user.role === "admin") {
+//       navigate("admin/home");
+//     } else {
+//       alert("user ui is not defined");
+//     }
+//   } else {
+//     alert("invalid password");
+//   }
+// } else {
+//   alert("invalid credentials");
+// }
+// -------------
+// if (findUser.role === "admin") {
+//   navigate("/admin/home");
+//   alert("your admin");
+// } else {
+//   alert("your a user");
+// }
+// Object.keys(findUser).length
