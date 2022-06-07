@@ -14,6 +14,10 @@ import Button from "@mui/material/Button";
 
 function Admin() {
   let navigate = useNavigate();
+  let logOut = () => {
+    window.localStorage.removeItem("userName");
+    navigate("/");
+  };
   return (
     <>
       <div className="container-fluid">
@@ -24,11 +28,15 @@ function Admin() {
           <div className="col-sm-10">
             {/*add row for tool bar  */}
             <div className="row">
-              <div className="col-sm-12 d-flex justify-content-end  mt-2">
+              <div className="col-sm-12 d-flex justify-content-end align-items-center mt-2">
+                <div className="me-2 user-box">
+                  <i className="fa-solid fa-user-large me-2"></i>
+                  <b className="user-name">
+                    {window.localStorage.getItem("userName")}
+                  </b>
+                </div>
                 <Button
-                  onClick={() => {
-                    navigate("/");
-                  }}
+                  onClick={logOut}
                   color="error"
                   className="me-3"
                   variant="outlined"

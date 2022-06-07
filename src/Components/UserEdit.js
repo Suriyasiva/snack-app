@@ -136,7 +136,7 @@ function UserEdit() {
                       <input
                         className="add-user-button mt-2"
                         type={"submit"}
-                        value="Add User"
+                        value="Submit"
                       />
                     </div>
                   </div>

@@ -97,3 +97,16 @@ export async function editUser(id, data) {
     console.log("---edit user error", error);
   }
 }
+export async function getOpenedTemplate() {
+  try {
+    let openedTemplate = await axios.get(
+      "https://61f0e50b072f86001749eedf.mockapi.io/tesark"
+    );
+    var opt = openedTemplate.data.find((menu) => {
+      return menu.isOpened === true;
+    });
+    return opt;
+  } catch (error) {
+    console.log("--api-getTemplates-error--", error);
+  }
+}

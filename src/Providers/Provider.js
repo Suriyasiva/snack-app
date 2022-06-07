@@ -5,11 +5,13 @@ import { deleteTemplate } from "../Questionrepository/QuestionRepo";
 import {
   singleTemplate,
   editTemplate,
+  getOpenedTemplate,
 } from "../Questionrepository/QuestionRepo";
 export const providerContext = React.createContext(" ");
 function Provider(props) {
   const [templateData, setTemplateData] = React.useState([]);
   const [singleTemplateData, setSingleTemplateData] = React.useState({});
+  const [isOpenedMenu, setIsOpenedMenu] = React.useState({});
   let menuData = () => {
     getTemplates()
       .then((res) => {
@@ -28,7 +30,15 @@ function Provider(props) {
         console.log(" single -data- err", err);
       });
   };
-
+  let openedTemplate = () => {
+    getOpenedTemplate()
+      .then((res) => {
+        setIsOpenedMenu(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const contextObject = {
     templateData: templateData,
     menuData: menuData,
@@ -38,8 +48,8 @@ function Provider(props) {
     singleTemplateData: singleTemplateData,
     setSingleTemplateData: setSingleTemplateData,
     editTemplate: editTemplate,
-    // userData: userData,
-    // user: user,
+    openedTemplate: openedTemplate,
+    isOpenedMenu: isOpenedMenu,
   };
 
   return (

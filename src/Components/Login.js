@@ -25,9 +25,11 @@ function Login() {
         });
         if (findUser) {
           if (findUser.role === "admin") {
+            window.localStorage.setItem("userName", findUser.userName);
             navigate("/admin/home");
           } else {
-            alert("your are user");
+            window.localStorage.setItem("userName", findUser.userName);
+            navigate("/user");
           }
         } else {
           alert("not valid user");
@@ -123,24 +125,3 @@ let LoginProvider = () => {
   );
 };
 export default LoginProvider;
-// if (user.email === values.email) {
-//   if (user.email === values.password) {
-//     if (user.role === "admin") {
-//       navigate("admin/home");
-//     } else {
-//       alert("user ui is not defined");
-//     }
-//   } else {
-//     alert("invalid password");
-//   }
-// } else {
-//   alert("invalid credentials");
-// }
-// -------------
-// if (findUser.role === "admin") {
-//   navigate("/admin/home");
-//   alert("your admin");
-// } else {
-//   alert("your a user");
-// }
-// Object.keys(findUser).length
