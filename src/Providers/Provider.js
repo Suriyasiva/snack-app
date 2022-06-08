@@ -6,12 +6,17 @@ import {
   singleTemplate,
   editTemplate,
   getOpenedTemplate,
+  addSubMisssion,
+  // logedUserDetails,
+  getSubmissions,
 } from "../Questionrepository/QuestionRepo";
 export const providerContext = React.createContext(" ");
 function Provider(props) {
   const [templateData, setTemplateData] = React.useState([]);
   const [singleTemplateData, setSingleTemplateData] = React.useState({});
   const [isOpenedMenu, setIsOpenedMenu] = React.useState({});
+  const [logedUserData, setLogedUserData] = React.useState({});
+  const [submissionData, setSubmissionData] = React.useState([]);
   let menuData = () => {
     getTemplates()
       .then((res) => {
@@ -39,6 +44,25 @@ function Provider(props) {
         console.log(error);
       });
   };
+  // let logedUser = (id) => {
+  //   logedUserDetails(id)
+  //     .then((res) => {
+  //       setLogedUserData(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+  let submissions = () => {
+    getSubmissions()
+      .then((res) => {
+        setSubmissionData([...res]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const contextObject = {
     templateData: templateData,
     menuData: menuData,
@@ -50,8 +74,12 @@ function Provider(props) {
     editTemplate: editTemplate,
     openedTemplate: openedTemplate,
     isOpenedMenu: isOpenedMenu,
+    addSubMisssion: addSubMisssion,
+    // logedUser: logedUser,
+    // logedUserData: logedUserData,
+    submissions: submissions,
+    submissionData: submissionData,
   };
-
   return (
     <>
       <providerContext.Provider value={contextObject}>

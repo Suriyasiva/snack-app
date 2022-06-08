@@ -345,3 +345,11 @@ input[type="number"]::-webkit-outer-spin-button {
 .user-name {
   color: #03045e;
 }
+.your-order {
+  color: #03045e;
+  font-weight: bold;
+}
+.right-arrow-menu {
+  font-size: 13px;
+  font-weight: bold;
+}

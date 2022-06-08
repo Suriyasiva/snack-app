@@ -16,6 +16,7 @@ function Admin() {
   let navigate = useNavigate();
   let logOut = () => {
     window.localStorage.removeItem("userName");
+    window.localStorage.removeItem("userId");
     navigate("/");
   };
   return (

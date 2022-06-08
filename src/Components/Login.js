@@ -29,6 +29,7 @@ function Login() {
             navigate("/admin/home");
           } else {
             window.localStorage.setItem("userName", findUser.userName);
+            window.localStorage.setItem("userId", findUser.id);
             navigate("/user");
           }
         } else {

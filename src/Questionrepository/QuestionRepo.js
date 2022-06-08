@@ -110,3 +110,35 @@ export async function getOpenedTemplate() {
     console.log("--api-getTemplates-error--", error);
   }
 }
+//https://61f0e50b072f86001749eedf.mockapi.io/submission
+export async function addSubMisssion(data) {
+  try {
+    await axios.post(
+      "https://61f0e50b072f86001749eedf.mockapi.io/submission",
+      data
+    );
+  } catch (error) {
+    console.log("post menu error", error);
+  }
+}
+// export async function logedUserDetails(id) {
+//   try {
+//     let logedUsers = await axios.get(
+//       `https://61f0e50b072f86001749eedf.mockapi.io/tesarkUsers/${id}`
+//     );
+//     return logedUsers.data;
+//   } catch (error) {
+//     console.log("--api-getTemplates-error--", error);
+//   }
+// }
+
+export async function getSubmissions() {
+  try {
+    let submissions = await axios.get(
+      "https://61f0e50b072f86001749eedf.mockapi.io/submission"
+    );
+    return submissions.data;
+  } catch (error) {
+    console.log("--api-getTemplates-error--", error);
+  }
+}
