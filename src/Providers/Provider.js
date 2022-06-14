@@ -9,14 +9,19 @@ import {
   addSubMisssion,
   // logedUserDetails,
   getSubmissions,
+  changeStatus,
+  checkingStatus,
+  getClosedStatus,
 } from "../Questionrepository/QuestionRepo";
 export const providerContext = React.createContext(" ");
 function Provider(props) {
   const [templateData, setTemplateData] = React.useState([]);
   const [singleTemplateData, setSingleTemplateData] = React.useState({});
   const [isOpenedMenu, setIsOpenedMenu] = React.useState({});
-  const [logedUserData, setLogedUserData] = React.useState({});
+  // const [logedUserData, setLogedUserData] = React.useState({});
   const [submissionData, setSubmissionData] = React.useState([]);
+  const [submissionUserstatus, setSubmissionUserStatus] = React.useState([]);
+  const [closedUserData, setClosedUserData] = React.useState({});
   let menuData = () => {
     getTemplates()
       .then((res) => {
@@ -62,7 +67,26 @@ function Provider(props) {
         console.log(err);
       });
   };
-
+  let checkStatus = (id) => {
+    checkingStatus(id)
+      .then((res) => {
+        setSubmissionUserStatus([...res]);
+        // console.log(res, "--------checkStatus res-------");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  let getRecentSubmission = (userID) => {
+    getClosedStatus(userID)
+      .then((res) => {
+        // console.log(res, "getRecentSubmission");
+        setClosedUserData(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const contextObject = {
     templateData: templateData,
     menuData: menuData,
@@ -79,6 +103,11 @@ function Provider(props) {
     // logedUserData: logedUserData,
     submissions: submissions,
     submissionData: submissionData,
+    changeStatus: changeStatus,
+    checkStatus: checkStatus,
+    submissionUserstatus: submissionUserstatus,
+    getRecentSubmission: getRecentSubmission,
+    closedUserData: closedUserData,
   };
   return (
     <>

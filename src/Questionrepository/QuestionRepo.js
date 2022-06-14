@@ -142,3 +142,42 @@ export async function getSubmissions() {
     console.log("--api-getTemplates-error--", error);
   }
 }
+export async function changeStatus(id, data) {
+  try {
+    await axios.put(
+      `https://61f0e50b072f86001749eedf.mockapi.io/submission/${id}`,
+      data
+    );
+  } catch (error) {
+    console.log("put--method--error", error);
+  }
+}
+export async function checkingStatus(logedUserId) {
+  try {
+    let submissions = await axios.get(
+      "https://61f0e50b072f86001749eedf.mockapi.io/submission"
+    );
+    let findUserStatus = submissions.data.filter((data) => {
+      return data.userId === logedUserId;
+    });
+    // console.log(findUserStatus, "findUserStatus");
+    return findUserStatus;
+  } catch (error) {
+    console.log("--api-getTemplates-error--", error);
+  }
+}
+export async function getClosedStatus(userID) {
+  try {
+    let submissions = await axios.get(
+      "https://61f0e50b072f86001749eedf.mockapi.io/submission"
+    );
+
+    let findData = submissions.data.filter((data) => {
+      return data.userId === userID;
+    });
+    // console.log(findData[findData.length - 1], "findData");
+    return findData[findData.length - 1];
+  } catch (error) {
+    console.log("--api-getTemplates-error--", error);
+  }
+}
