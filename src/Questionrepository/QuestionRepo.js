@@ -168,6 +168,7 @@ export async function checkingStatus(logedUserId) {
 }
 export async function getClosedStatus(userID) {
   try {
+    console.log(userID, "getting id");
     let submissions = await axios.get(
       "https://61f0e50b072f86001749eedf.mockapi.io/submission"
     );
@@ -175,7 +176,7 @@ export async function getClosedStatus(userID) {
     let findData = submissions.data.filter((data) => {
       return data.userId === userID;
     });
-    // console.log(findData[findData.length - 1], "findData");
+    console.log(findData[findData.length - 1], "findData");
     return findData[findData.length - 1];
   } catch (error) {
     console.log("--api-getTemplates-error--", error);

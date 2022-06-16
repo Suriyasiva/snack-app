@@ -79,7 +79,6 @@ function User() {
   const handleClick = (Transition) => () => {
     setTransition(() => Transition);
     setSnackBarOpen(true);
-
     setTimeout(() => {
       snackHandleClose();
     }, 3000);
@@ -108,25 +107,25 @@ function User() {
       getMenuStatus(contextValues.submissionUserstatus);
     }
   }, [contextValues.submissionUserstatus]);
-  let handleSubmit = () => {
-    contextValues.addSubMisssion({ ...option, status: "Closed" });
+  let handleSubmit = async () => {
+    await contextValues.addSubMisssion({ ...option, status: "Closed" });
     setOpen(false);
-    contextValues.getRecentSubmission(window.localStorage.getItem("userId"));
     setSnackBarOpen(true);
     setTimeout(() => {
       snackHandleClose();
       setSelectView(true);
     }, 3000);
+    contextValues.getRecentSubmission(window.localStorage.getItem("userId"));
     handleClick(TransitionLeft);
   };
   return (
-    <div className="container mt-3">
-      <div className="row">
+    <div className="container-fluid user-bacjground">
+      <div className="row ">
         <div className="col-sm-12">
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end mt-4">
             <div className="me-2 user-box">
-              <i className="fa-solid fa-user-large me-2"></i>
-              <b className="user-name">
+              <i className="fa-solid fa-user-large border border-white p-2 text-white me-2"></i>
+              <b className="user-name text-white">
                 {window.localStorage.getItem("userName")}
               </b>
             </div>
@@ -134,7 +133,7 @@ function User() {
               onClick={logOut}
               color="error"
               className="me-3"
-              variant="outlined"
+              variant="contained"
             >
               LogOut
             </Button>
@@ -142,14 +141,19 @@ function User() {
         </div>
       </div>
       <div className="row mt-5">
-        <div className="col-sm-12 d-flex justify-content-center  align-items-center">
+        <div className="col-sm-6">
+          <div className="text-white">left</div>
+        </div>
+        <div className="col-sm-6 ">
           <div
             style={{ display: selectView ? "none" : "inline" }}
-            className="col-sm-8 mt-3"
+            className="col-sm-8 mt-3 "
           >
-            <h4>{contextValues.isOpenedMenu.name}</h4>
-            <div className="d-flex">
-              <div style={{ width: "300px" }}>
+            <h4 className="text-white mb-2">
+              Select Your Favourite: {contextValues.isOpenedMenu.name}
+            </h4>
+            <div className="d-flex d-flex ">
+              <div style={{ width: "300px", marginRight: "3px" }}>
                 <Select
                   options={selectOption}
                   className="basic-multi-select"
@@ -157,7 +161,11 @@ function User() {
                   onChange={selectedOption}
                 />
               </div>
-              <Button variant="outlined" onClick={handleClickOpen}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleClickOpen}
+              >
                 Order
               </Button>
               <div>
@@ -221,18 +229,20 @@ function User() {
           </div>
           {selectView ? (
             <div>
-              <div className="font-weight-bold">
+              <div className="font-weight-bold text-white">
                 Menu:
-                <span style={{ color: "grey" }}>
+                <span style={{ color: "whitesmoke" }}>
+                  &nbsp;
                   {contextValues.isOpenedMenu.name}
                 </span>
               </div>
-              <div className="font-weight-bold">
+              <div className="font-weight-bold text-white">
                 Your Snack:
                 {Object.keys(contextValues.closedUserData).length === 0 ? (
-                  <span>Loading</span>
+                  <span>Loading...</span>
                 ) : (
-                  <span style={{ color: "grey" }}>
+                  <span style={{ color: "whitesmoke" }}>
+                    &nbsp;
                     {contextValues.closedUserData.selected[0]}
                   </span>
                 )}

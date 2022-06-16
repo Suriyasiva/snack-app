@@ -71,7 +71,7 @@ function CreateMenu() {
                     color: "#fff",
                   }}
                   variant="raised"
-                  className=" create-menu-back mt-3 mb-3"
+                  className=" create-menu-back text-white mt-3 mb-3"
                 >
                   &nbsp;Back
                 </Button>

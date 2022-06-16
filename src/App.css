@@ -131,7 +131,20 @@ th {
   vertical-align: middle;
 }
 .create-menu-back:hover::before {
-  content: "◀";
+  content: "";
+  width: 15px;
+  margin-right: 2px;
+}
+.create-menu-back::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 24px;
+  overflow: hidden;
+  background-image: url("https://icons.getbootstrap.com/assets/icons/arrow-left.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: width 200ms, margin-left 200ms;
 }
 
 .template-name-field {
@@ -352,4 +365,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .right-arrow-menu {
   font-size: 13px;
   font-weight: bold;
+}
+.user-bacjground {
+  background-image: url("https://app.doofies.in/assets/images/banner.jpg");
+  height: 100vh;
 }

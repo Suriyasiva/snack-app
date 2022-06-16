@@ -78,13 +78,14 @@ function Provider(props) {
       });
   };
   let getRecentSubmission = (userID) => {
+    console.log(userID, "userID");
     getClosedStatus(userID)
       .then((res) => {
-        // console.log(res, "getRecentSubmission");
+        console.log(res, "getRecentSubmission");
         setClosedUserData(res);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err, "finding error");
       });
   };
   const contextObject = {
