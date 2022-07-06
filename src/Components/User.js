@@ -73,6 +73,7 @@ function User() {
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [transition, setTransition] = React.useState(undefined);
   const [selectView, setSelectView] = React.useState(false);
+  const [isDisable, setDisable] = React.useState(false);
   const snackHandleClose = () => {
     setSnackBarOpen(false);
   };
@@ -83,11 +84,6 @@ function User() {
       snackHandleClose();
     }, 3000);
   };
-
-  // console.log(
-  //   contextValues.submissionUserstatus,
-  //   "submisssion user information"
-  // );
 
   let getMenuStatus = (data) => {
     data.filter((subdata) => {
@@ -108,6 +104,7 @@ function User() {
     }
   }, [contextValues.submissionUserstatus]);
   let handleSubmit = async () => {
+    await setDisable(true);
     await contextValues.addSubMisssion({ ...option, status: "Closed" });
     setOpen(false);
     setSnackBarOpen(true);
@@ -119,141 +116,165 @@ function User() {
     handleClick(TransitionLeft);
   };
   return (
-    <div className="container-fluid user-bacjground">
-      <div className="row ">
-        <div className="col-sm-12">
-          <div className="d-flex justify-content-end mt-4">
-            <div className="me-2 user-box">
-              <i className="fa-solid fa-user-large border border-white p-2 text-white me-2"></i>
-              <b className="user-name text-white">
-                {window.localStorage.getItem("userName")}
-              </b>
+    <>
+      <div className="container-fluid user-bacjground">
+        {/*---top bar---*/}
+        <div className="row ">
+          <div className="col-sm-12">
+            <div className="d-flex justify-content-between align-items-center mt-4">
+              <img
+                src="https://www.tesark.com/wp-content/uploads/2019/11/TESARK_Royal.svg"
+                alt="logoWithName"
+                className="ms-3 img-fluid tesark-logo2"
+              />
+              <div className="me-2 user-box">
+                <i className="fa-solid fa-user-large border border-white p-2 text-white me-2"></i>
+                <b className="user-name ">
+                  {window.localStorage.getItem("userName")}
+                </b>
+                <Button
+                  onClick={logOut}
+                  color="secondary"
+                  className="me-3 ms-3"
+                  variant="contained"
+                >
+                  LogOut
+                </Button>
+              </div>
             </div>
-            <Button
-              onClick={logOut}
-              color="error"
-              className="me-3"
-              variant="contained"
-            >
-              LogOut
-            </Button>
           </div>
         </div>
-      </div>
-      <div className="row mt-5">
-        <div className="col-sm-6">
-          <div className="text-white">left</div>
+        {/* --greet-- */}
+        <div className="row mt-5">
+          <div className="col-sm-12 d-flex justify-content-center">
+            <div className="text-light p-3 greeting-user display-4">
+              welcome to tesark
+            </div>
+          </div>
         </div>
-        <div className="col-sm-6 ">
-          <div
-            style={{ display: selectView ? "none" : "inline" }}
-            className="col-sm-8 mt-3 "
-          >
-            <h4 className="text-white mb-2">
-              Select Your Favourite: {contextValues.isOpenedMenu.name}
-            </h4>
-            <div className="d-flex d-flex ">
-              <div style={{ width: "300px", marginRight: "3px" }}>
-                <Select
-                  options={selectOption}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                  onChange={selectedOption}
-                />
-              </div>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClickOpen}
+        {/*--select--*/}
+        <div className="row mt-3">
+          <div className="col-sm-12 d-flex justify-content-center">
+            <div>
+              <div
+                style={{ display: selectView ? "none" : "inline" }}
+                className="col-sm-8 mt-3 "
               >
-                Order
-              </Button>
-              <div>
-                <Dialog
-                  open={open}
-                  fullWidth
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    Confirm Your Order ?
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      <div className="your-order">
-                        Your Order: {contextValues.isOpenedMenu.name}&nbsp;
-                        <i className="fa-solid fa-chevron-right right-arrow-menu"></i>
-                        &nbsp;
-                        <span style={{ color: "tomato" }}>
-                          {option.selected}
-                        </span>
-                      </div>
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={handleSubmit} autoFocus>
-                      Agree
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-                {/* snack bar */}
-                <div className="snackBar">
-                  <Snackbar
-                    open={snackBarOpen}
-                    onClose={snackHandleClose}
-                    TransitionComponent={transition}
-                    message="Order Placed"
-                    key={transition ? transition.name : ""}
+                <h5 className="text-white input-label mb-2">
+                  Select Your Favourite: {contextValues.isOpenedMenu.name}
+                </h5>
+                <div className="d-flex d-flex ">
+                  <div style={{ width: "300px", marginRight: "3px" }}>
+                    <Select
+                      options={selectOption}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      onChange={selectedOption}
+                    />
+                  </div>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClickOpen}
                   >
-                    <Alert
-                      onClose={snackHandleClose}
-                      open={snackBarOpen}
-                      severity="success"
-                      sx={{ width: "100%" }}
+                    Order
+                  </Button>
+                  <div>
+                    <Dialog
+                      open={open}
+                      fullWidth
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
                     >
-                      Order Placed successfully
-                    </Alert>
-                  </Snackbar>
+                      <DialogTitle id="alert-dialog-title">
+                        Confirm Your Order ?
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          <div className="your-order">
+                            <span className="text-dark">Your Order:</span>{" "}
+                            {contextValues.isOpenedMenu.name}&nbsp;
+                            <i className="fa-solid fa-chevron-right right-arrow-menu"></i>
+                            &nbsp;
+                            <span style={{ color: "tomato" }}>
+                              {option.selected}
+                            </span>
+                          </div>
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button
+                          onClick={handleSubmit}
+                          disabled={isDisable}
+                          autoFocus
+                        >
+                          Place Order
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                    {/* snack bar */}
+                    <div className="snackBar">
+                      <Snackbar
+                        open={snackBarOpen}
+                        onClose={snackHandleClose}
+                        TransitionComponent={transition}
+                        message="Order Placed"
+                        key={transition ? transition.name : ""}
+                      >
+                        <Alert
+                          onClose={snackHandleClose}
+                          open={snackBarOpen}
+                          severity="success"
+                          sx={{ width: "100%" }}
+                        >
+                          Order Placed successfully
+                        </Alert>
+                      </Snackbar>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <div style={{ display: optionAlert ? "block" : "none" }}>
+                    <Stack sx={{ width: "100%" }} spacing={2}>
+                      <Alert severity="error">Please Select The Menu !!!</Alert>
+                    </Stack>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="mt-2">
-              <div style={{ display: optionAlert ? "block" : "none" }}>
-                <Stack sx={{ width: "50%" }} spacing={2}>
-                  <Alert severity="error">Please Select The Menu !!!</Alert>
-                </Stack>
-              </div>
+              {selectView ? (
+                <div>
+                  <div className=" opened-menu-container text-white">
+                    Opened Menu:
+                    <span className="opened-menu">
+                      &nbsp;
+                      {contextValues.isOpenedMenu.name}
+                    </span>
+                  </div>
+                  <div className=" opened-menu-container text-white">
+                    Selected Item:
+                    {Object.keys(contextValues.closedUserData).length === 0 ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <span
+                        className="opened-menu"
+                        style={{ color: "whitesmoke" }}
+                      >
+                        &nbsp;
+                        {contextValues.closedUserData.selected[0]}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
-          {selectView ? (
-            <div>
-              <div className="font-weight-bold text-white">
-                Menu:
-                <span style={{ color: "whitesmoke" }}>
-                  &nbsp;
-                  {contextValues.isOpenedMenu.name}
-                </span>
-              </div>
-              <div className="font-weight-bold text-white">
-                Your Snack:
-                {Object.keys(contextValues.closedUserData).length === 0 ? (
-                  <span>Loading...</span>
-                ) : (
-                  <span style={{ color: "whitesmoke" }}>
-                    &nbsp;
-                    {contextValues.closedUserData.selected[0]}
-                  </span>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div></div>
-          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -265,6 +286,3 @@ let userProvider = () => {
   );
 };
 export default userProvider;
-// contextValues.isOpenedMenu.selectedType==="single"?null:isMulti
-{
-}

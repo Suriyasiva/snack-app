@@ -356,7 +356,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 50%;
 }
 .user-name {
-  color: #03045e;
+  color: #fff;
 }
 .your-order {
   color: #03045e;
@@ -367,6 +367,50 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: bold;
 }
 .user-bacjground {
-  background-image: url("https://app.doofies.in/assets/images/banner.jpg");
+  /* background-image: url("https://app.doofies.in/assets/images/banner.jpg"); */
+  background-image: linear-gradient(
+    to right top,
+    #0f0c29,
+    #151537,
+    #1e1c45,
+    #262454,
+    #302b63
+  );
   height: 100vh;
+}
+.tesark-logo1 {
+  height: 28px;
+}
+.tesark-logo2 {
+  height: 30px;
+  padding: 5px;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fff !important;
+}
+.tesark-logo2:hover {
+  border: 2px solid #fff;
+}
+
+.greeting-user {
+  font-family: "Allura", cursive;
+  transform: scale(2);
+  color: #adf0d1 !important;
+}
+
+.opened-menu {
+  text-transform: capitalize;
+  color: #fff !important;
+}
+
+.opened-menu-container {
+  font-size: 25px;
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Work Sans", sans-serif;
+  color: #fff;
+}
+.input-label {
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Work Sans", sans-serif;
 }
