@@ -59,7 +59,7 @@ function User() {
     setOption({
       selected: [e.label],
       userId: window.localStorage.getItem("userId"),
-      templateId: contextValues.isOpenedMenu.id,
+      templateId: contextValues.isOpenedMenu._id,
       userName: window.localStorage.getItem("userName"),
     });
   };

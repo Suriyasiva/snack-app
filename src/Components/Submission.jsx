@@ -41,10 +41,10 @@ function Submission() {
                       <td>{loaders}</td>
                     </tr>
                   ) : (
-                    contextValues.submissionData.map((data) => {
+                    contextValues.submissionData.map((data, index) => {
                       return (
                         <tr>
-                          <th scope="row">{data.id}</th>
+                          <th scope="row">{index + 1}</th>
                           <td className="fw-bold">{data.userName}</td>
                           <td>{data.userId}</td>
                           <td>{data.templateId}</td>
@@ -56,7 +56,7 @@ function Submission() {
                             {data.status === "Closed" ? (
                               <Button
                                 onClick={() => {
-                                  handleStatus(data.id, "Active");
+                                  handleStatus(data._id, "Active");
                                 }}
                                 variant="outlined"
                                 color="error"
@@ -66,7 +66,7 @@ function Submission() {
                             ) : (
                               <Button
                                 onClick={() => {
-                                  handleStatus(data.id, "Closed");
+                                  handleStatus(data._id, "Closed");
                                 }}
                                 variant="outlined"
                                 color="error"

@@ -30,8 +30,13 @@ function EditMenu() {
       name: "",
       selectedType: "",
     },
-    onSubmit: (values) => {
-      contextValues.editTemplate(params.id, {
+    onSubmit: async (values) => {
+      delete values._id;
+      delete values.__v;
+      console.log(values, "editvalues");
+      console.log(templateData.options, "editvalues1");
+      console.log(...optionValues, "editvalues2");
+      await contextValues.editTemplate(params.id, {
         ...values,
         options: [...optionValues, ...templateData.options],
       });
@@ -158,7 +163,8 @@ function EditMenu() {
                                       ...contextValues.singleTemplateData,
                                       options:
                                         contextValues.singleTemplateData.options.filter(
-                                          (optionId) => optionId.id !== menu.id
+                                          (optionId) =>
+                                            optionId._id !== menu._id
                                         ),
                                     });
                                   }}

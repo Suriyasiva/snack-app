@@ -26,15 +26,21 @@ function Menu() {
 
   const changeIsOpened = async (id) => {
     try {
+      console.log(id, "id");
       const contextData = contextValues.templateData;
       var findId = contextData.findIndex((data) => {
-        return data.id === id;
+        return data._id === id;
       });
-      // console.log(contextData[findId], "findId");
+      console.log(contextData[findId], "findId");
       let changeData = await axios.put(
-        `https://61f0e50b072f86001749eedf.mockapi.io/tesark/${id}`,
+        `http://localhost:5000/manageStatus/isOpened/${id}`,
         {
           isOpened: contextData[findId].isOpened ? false : true,
+        },
+        {
+          headers: {
+            authorization: window.localStorage.getItem("app_token"),
+          },
         }
       );
       contextValues.menuData();
@@ -80,14 +86,14 @@ function Menu() {
                       </tr>
                     </thead>
                     <tbody>
-                      {optionValues.map((data) => {
+                      {optionValues.map((data, index) => {
                         return (
                           <tr>
-                            <th scope="row">{data.id}</th>
+                            <th scope="row">{index + 1}</th>
                             <td className="view-Menu">
                               <strong
                                 onClick={() => {
-                                  console.log(data.id);
+                                  console.log(data._id);
                                 }}
                               >
                                 {data.name}
@@ -100,7 +106,7 @@ function Menu() {
                             )}
                             <td>
                               <Link
-                                to={`/admin/editMenu/${data.id}`}
+                                to={`/admin/editMenu/${data._id}`}
                                 className="menu-edit-button  m-2"
                               >
                                 <i className="fa-solid fa-pen-to-square"></i>{" "}
@@ -137,7 +143,7 @@ function Menu() {
                                     </Button>
                                     <Button
                                       onClick={() => {
-                                        deleteMenu(data.id);
+                                        deleteMenu(data._id);
                                       }}
                                       autoFocus
                                     >
@@ -151,7 +157,7 @@ function Menu() {
                               {data.isOpened ? (
                                 <Button
                                   onClick={() => {
-                                    changeIsOpened(data.id);
+                                    changeIsOpened(data._id);
                                   }}
                                   variant="outlined"
                                   color="error"
@@ -162,7 +168,7 @@ function Menu() {
                               ) : (
                                 <Button
                                   onClick={() => {
-                                    changeIsOpened(data.id);
+                                    changeIsOpened(data._id);
                                   }}
                                   variant="outlined"
                                   color="success"

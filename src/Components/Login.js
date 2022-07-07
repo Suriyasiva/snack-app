@@ -3,10 +3,12 @@ import { useFormik } from "formik";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AuthProvider, { authProviderContext } from "../Providers/AuthProvider";
+import jwt_decode from "jwt-decode";
 function Login() {
   let navigate = useNavigate();
   const contextValues = useContext(authProviderContext);
   const [userData, setUserData] = useState([]);
+
   useEffect(() => {
     contextValues.userData();
   }, []);
@@ -17,27 +19,52 @@ function Login() {
     },
     onSubmit: async (values, { resetForm }) => {
       try {
-        let users = await contextValues.user;
-        let findUser = await users.find((data) => {
-          return (
-            data.email === values.email && data.password === values.password
+        let generateToken = await contextValues.login(values);
+        window.localStorage.setItem(
+          "app_token",
+          generateToken.data.credentials.token
+        );
+        let decode = jwt_decode(generateToken.data.credentials.token);
+        if (decode.role === "admin") {
+          window.localStorage.setItem(
+            "userName",
+            generateToken.data.credentials.userName
           );
-        });
-        if (findUser) {
-          if (findUser.role === "admin") {
-            window.localStorage.setItem("userName", findUser.userName);
-            navigate("/admin/home");
-          } else {
-            window.localStorage.setItem("userName", findUser.userName);
-            window.localStorage.setItem("userId", findUser.id);
-            navigate("/user");
-          }
+          navigate("/admin/home");
         } else {
-          alert("not valid user");
+          window.localStorage.setItem(
+            "userName",
+            generateToken.data.credentials.userName
+          );
+          window.localStorage.setItem(
+            "userId",
+            generateToken.data.credentials.id
+          );
+          navigate("/user");
         }
+        //  ------------------------------------------------
+        // let users = await contextValues.user;
+        // let findUser = await users.find((data) => {
+        //   return (
+        //     data.email === values.email && data.password === values.password
+        //   );
+        // });
+        // if (findUser) {
+        //   if (findUser.role === "admin") {
+        //     window.localStorage.setItem("userName", findUser.userName);
+        //     navigate("/admin/home");
+        //   } else {
+        //     window.localStorage.setItem("userName", findUser.userName);
+        //     window.localStorage.setItem("userId", findUser.id);
+        //     navigate("/user");
+        //   }
+        // } else {
+        //   alert("not valid user");
+        // }
         resetForm();
       } catch (error) {
         resetForm();
+        alert("invalid credentials");
         console.log(error, "error");
       }
     },

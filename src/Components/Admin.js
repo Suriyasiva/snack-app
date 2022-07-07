@@ -32,7 +32,7 @@ function Admin() {
               <div className="col-sm-12 d-flex justify-content-end align-items-center mt-2">
                 <div className="me-2 user-box">
                   <i className="fa-solid fa-user-large me-2"></i>
-                  <b className="user-name">
+                  <b className="user-name text-dark">
                     {window.localStorage.getItem("userName")}
                   </b>
                 </div>

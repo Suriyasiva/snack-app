@@ -5,6 +5,7 @@ import {
   addUser,
   singleUser,
   editUser,
+  login,
 } from "../Questionrepository/QuestionRepo";
 export const authProviderContext = React.createContext(" ");
 function AuthProvider(props) {
@@ -37,6 +38,7 @@ function AuthProvider(props) {
     getUser: getUser,
     singleUserData: singleUserData,
     editUser: editUser,
+    login: login,
   };
   return (
     <>

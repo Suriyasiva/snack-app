@@ -50,7 +50,7 @@ function CreateMenu() {
   };
   const addMenu = () => {
     if (menu) {
-      setMenuData([...menudata, { id: Date.now(), name: menu }]);
+      setMenuData([...menudata, { _id: Date.now(), name: menu }]);
       setmenu("");
     }
   };

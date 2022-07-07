@@ -15,10 +15,17 @@ function UserEdit() {
       email: "",
       role: "",
       phoneNumber: "",
-      password: "",
     },
-    onSubmit: (values, { resetForm }) => {
-      contextValues.editUser(params.id, values);
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values, "editvalues");
+      let payload = {
+        userName: values.userName,
+        email: values.email,
+        role: values.role,
+        phoneNumber: values.phoneNumber,
+      };
+      console.log(payload, "editvalues");
+      await contextValues.editUser(params.id, payload);
       resetForm();
       navigate(-1);
     },
@@ -119,20 +126,7 @@ function UserEdit() {
                     </div>
                   </div>
                   <div className="row mt-1">
-                    <div className="col-sm-6 ">
-                      <label className="form-label font-weight-bold m-0">
-                        Password:
-                      </label>
-                      <input
-                        className="form-control m-0"
-                        type={"text"}
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        name="password"
-                        placeholder="Name Dob-Year"
-                      />
-                    </div>
-                    <div className="col-sm-6 dialogbox-submit">
+                    <div className="col-sm-12 dialogbox-submit">
                       <input
                         className="add-user-button mt-2"
                         type={"submit"}

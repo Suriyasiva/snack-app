@@ -244,10 +244,10 @@ function Users() {
                           <td>{loaders}</td>
                         </tr>
                       ) : (
-                        usersData.map((user) => {
+                        usersData.map((user, index) => {
                           return (
                             <tr>
-                              <th scope="row">{user.id}</th>
+                              <th scope="row">{index + 1}</th>
                               <td className="view-Menu">
                                 <strong>{user.userName}</strong>
                               </td>
@@ -255,7 +255,7 @@ function Users() {
                               <td>{user.role}</td>
                               <td>
                                 <Link
-                                  to={`/admin/editUser/${user.id}`}
+                                  to={`/admin/editUser/${user._id}`}
                                   className="menu-edit-button  m-2"
                                 >
                                   <i className="fa-solid fa-pen-to-square"></i>
@@ -291,7 +291,7 @@ function Users() {
                                       </Button>
                                       <Button
                                         onClick={() => {
-                                          handleDelete(user.id);
+                                          handleDelete(user._id);
                                         }}
                                         autoFocus
                                       >
