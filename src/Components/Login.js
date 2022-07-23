@@ -4,13 +4,23 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AuthProvider, { authProviderContext } from "../Providers/AuthProvider";
 import jwt_decode from "jwt-decode";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import CircularProgress from "@mui/material/CircularProgress";
+import tesarkTechnologiesSquarelogo from "../assets/tesarkTechnologiesSquarelogo.png";
+
 function Login() {
   let navigate = useNavigate();
+  let [showPassword, setShowPassword] = useState(true);
+  let [disableSubmit, setDisableSubmit] = useState(false);
+  let [showError, setShowError] = useState("");
+  let [activateAlert, setActivateAlert] = useState(false);
+  let [loginBtnLoader, setLoginBtnLoader] = useState(false);
   const contextValues = useContext(authProviderContext);
-  const [userData, setUserData] = useState([]);
-
   useEffect(() => {
-    contextValues.userData();
+    setShowPassword(true);
+    //   contextValues.userData();
+    window.localStorage.clear();
   }, []);
   const formik = useFormik({
     initialValues: {
@@ -19,17 +29,21 @@ function Login() {
     },
     onSubmit: async (values, { resetForm }) => {
       try {
+        await setLoginBtnLoader(true);
+        await setDisableSubmit(true);
         let generateToken = await contextValues.login(values);
         window.localStorage.setItem(
           "app_token",
           generateToken.data.credentials.token
         );
+
         let decode = jwt_decode(generateToken.data.credentials.token);
         if (decode.role === "admin") {
           window.localStorage.setItem(
             "userName",
             generateToken.data.credentials.userName
           );
+          window.localStorage.setItem("userRole", decode.role);
           navigate("/admin/home");
         } else {
           window.localStorage.setItem(
@@ -40,103 +54,163 @@ function Login() {
             "userId",
             generateToken.data.credentials.id
           );
+          window.localStorage.setItem("userRole", decode.role);
           navigate("/user");
         }
-        //  ------------------------------------------------
-        // let users = await contextValues.user;
-        // let findUser = await users.find((data) => {
-        //   return (
-        //     data.email === values.email && data.password === values.password
-        //   );
-        // });
-        // if (findUser) {
-        //   if (findUser.role === "admin") {
-        //     window.localStorage.setItem("userName", findUser.userName);
-        //     navigate("/admin/home");
-        //   } else {
-        //     window.localStorage.setItem("userName", findUser.userName);
-        //     window.localStorage.setItem("userId", findUser.id);
-        //     navigate("/user");
-        //   }
-        // } else {
-        //   alert("not valid user");
-        // }
         resetForm();
       } catch (error) {
         resetForm();
-        alert("invalid credentials");
-        console.log(error, "error");
+        setLoginBtnLoader(false);
+        setDisableSubmit(false);
+        //
+        await setShowError(error.response.data.message.slice(8));
+        setActivateAlert(true);
+        console.log(error.response.data, "error");
       }
     },
     validate: (values) => {
       const errors = {};
       if (!values.email) {
-        errors.email = "Required";
+        errors.email = "required";
       } else if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
       ) {
-        errors.email = "Invalid email address";
+        errors.email = "invalid email address";
       }
       if (!values.password) {
-        errors.password = "Required";
+        errors.password = "required";
       }
       return errors;
     },
   });
+  useEffect(() => {
+    console.log("iam alert disabler");
+    if (activateAlert) {
+      setTimeout(() => {
+        setActivateAlert(false);
+      }, 3000);
+    }
+  }, [activateAlert]);
+
   return (
     <>
+      {/* ----------------------- */}
       <div className="App">
-        <div className="container">
-          <div className="row d-flex justify-content-center login-card-container">
-            <div className="col-md-4">
-              <div className="d-flex justify-content-center">
-                <h4 className="font-weight-bold">LOGIN</h4>
-              </div>
-              <form onSubmit={formik.handleSubmit}>
-                <div className="form-group">
-                  <label className="font-weight-bold">Email :</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    name="email"
-                    placeholder="Enter email"
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                  />
-                  {formik.errors.email ? (
-                    <div style={{ color: "red" }}>{formik.errors.email} !</div>
-                  ) : null}
-                </div>
-                <div className="form-group mt-1">
-                  <label className="font-weight-bold">Password:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    placeholder="Password"
-                    onChange={formik.handleChange}
-                    value={formik.values.password}
-                  />
-                  {formik.errors.password ? (
-                    <div style={{ color: "red" }}>
-                      {formik.errors.password} !
-                    </div>
-                  ) : null}
-                </div>
-                <div className="d-grid mt-2">
-                  <Button
-                    type="submit"
-                    value={"Login"}
-                    style={{
-                      backgroundColor: "#03045e",
-                      color: "#fff",
+        <div className="container ">
+          <div className="row d-flex justify-content-start login-card-container">
+            <div className="col-lg-12">
+              <div className="row errorAlert mt-3">
+                <div className="col-md-10  colErrorAlert  d-flex justify-content-center">
+                  <Stack
+                    sx={{
+                      width: "28rem",
+                      display: activateAlert ? "block" : "none",
                     }}
-                    variant="raised"
+                    spacing={2}
                   >
-                    Login
-                  </Button>
+                    <Alert severity="error">{showError} !</Alert>
+                  </Stack>
                 </div>
-              </form>
+              </div>
+              <div className="row mb-5 pb-3">
+                <div className="col-md-4 d-flex justify-content-center">
+                  <p className="login-greet">Welcome to tesark...</p>
+                </div>
+              </div>
+              <div className="col-md-4 login-form">
+                <div className="d-flex justify-content-center">
+                  <div>
+                    <img
+                      className="img-fluid tesark-login-logo"
+                      src={tesarkTechnologiesSquarelogo}
+                      alt="tsark-logo"
+                    ></img>
+                    <h4 className="font-weight-bold mt-5 mb-2">LOGIN</h4>
+                  </div>
+                </div>
+                <form onSubmit={formik.handleSubmit}>
+                  <div className="form-group">
+                    <label className="font-weight-bold">Email:</label>
+                    <input
+                      type="email"
+                      className="form-control login-email"
+                      name="email"
+                      placeholder="Enter email"
+                      onChange={formik.handleChange}
+                      value={formik.values.email}
+                    />
+                    {formik.errors.email ? (
+                      <div
+                        style={{
+                          color: "red",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {formik.errors.email} !
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="form-group mt-1 password-container">
+                    <label className="font-weight-bold">Password:</label>
+                    <input
+                      type={showPassword ? "password" : "text"}
+                      className="form-control login-email"
+                      name="password"
+                      placeholder="Password"
+                      onChange={formik.handleChange}
+                      value={formik.values.password}
+                    />
+                    {showPassword ? (
+                      <i
+                        onClick={() => {
+                          setShowPassword(false);
+                        }}
+                        className="fa-solid fa-eye"
+                      ></i>
+                    ) : (
+                      <i
+                        onClick={() => {
+                          setShowPassword(true);
+                        }}
+                        className="fa-solid fa-eye-slash"
+                      ></i>
+                    )}
+                    {formik.errors.password ? (
+                      <div
+                        style={{
+                          color: "red",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {formik.errors.password} !
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="d-grid mt-2">
+                    <Button
+                      disabled={disableSubmit}
+                      type="submit"
+                      value={"Login"}
+                      style={{
+                        backgroundColor: disableSubmit
+                          ? "rgb(159 86 148)"
+                          : "#3f0036",
+                        color: "#fff",
+                      }}
+                      variant="raised"
+                    >
+                      Login &nbsp;
+                      {loginBtnLoader ? (
+                        <CircularProgress sx={{ color: "#fff" }} size="1rem" />
+                      ) : (
+                        " "
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

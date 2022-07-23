@@ -115,7 +115,7 @@ function EditMenu() {
                         <Button
                           onClick={addOption}
                           style={{
-                            backgroundColor: "#03045e",
+                            backgroundColor: "#3f0036",
                             color: "#fff",
                           }}
                           variant="raised"
@@ -205,7 +205,7 @@ function EditMenu() {
                 <div className="col-sm-10 d-flex justify-content-end mt-4">
                   <Button
                     style={{
-                      backgroundColor: "#03045e",
+                      backgroundColor: "#3f0036",
                       color: "#fff",
                     }}
                     variant="raised"

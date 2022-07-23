@@ -123,7 +123,7 @@ function CreateMenu() {
                         />
                         <Button
                           style={{
-                            backgroundColor: "#03045e",
+                            backgroundColor: "#3f0036",
                             color: "#fff",
                           }}
                           variant="raised"
@@ -156,7 +156,7 @@ function CreateMenu() {
                           onClick={() => {
                             setMenuData(
                               menudata.filter((val) => {
-                                return val.id !== dish.id;
+                                return val._id !== dish._id;
                               })
                             );
                           }}
@@ -202,7 +202,7 @@ function CreateMenu() {
                   <Button
                     type="submit"
                     style={{
-                      backgroundColor: "#03045e",
+                      backgroundColor: "#3f0036",
                       color: "#fff",
                     }}
                     variant="raised"

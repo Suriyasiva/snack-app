@@ -78,10 +78,10 @@ function Provider(props) {
       });
   };
   let getRecentSubmission = (userID) => {
-    console.log(userID, "userID");
+    // console.log(userID, "userID");
     getClosedStatus(userID)
       .then((res) => {
-        console.log(res, "getRecentSubmission");
+        // console.log(res, "getRecentSubmission");
         setClosedUserData(res);
       })
       .catch((err) => {

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Allura&family=Pacifico&family=Roboto:wght@300&family=Rubik&family=Sacramento&family=Work+Sans&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -8,13 +9,13 @@
 .fa-paper-plane,
 .bi-ui-radios-grid,
 .fa-users {
-  color: #caf0f8;
+  color: #fff;
 }
 .home-nav {
-  color: #caf0f8;
+  color: #fff;
 }
 .home-component {
-  background-color: #03045e;
+  background-color: #3f0036;
 }
 
 .nav-container {
@@ -41,7 +42,7 @@
   position: relative;
 }
 .fa-circle-arrow-left {
-  color: #caf0f8;
+  color: #fff;
   font-size: 30px;
   position: absolute;
   top: 23px;
@@ -53,8 +54,8 @@
   background-image: linear-gradient(
     transparent 0%,
     transparent 90%,
-    #caf0f8 90%,
-    #caf0f8 100%
+    #fff 90%,
+    #fff 100%
   );
   background-repeat: no-repeat;
   background-size: 0% 100%;
@@ -69,7 +70,7 @@
 .menu-add-Button {
   --button_radius: 0.75em;
   --button_color: #e8e8e8;
-  --button_outline_color: #03045e;
+  --button_outline_color: #3f0036;
   font-size: 13px;
   font-weight: bold;
   text-decoration: none;
@@ -112,7 +113,7 @@
   color: yellow;
 }
 /* .table-menu {
-  border: 2px solid #03045e;
+  border: 2px solid #3f0036;
 } */
 .fa-check {
   color: rgb(14, 196, 14);
@@ -157,9 +158,9 @@ th {
   margin-left: 4px;
   padding-right: 3px;
   padding-left: 3px;
-  color: #03045e;
+  color: #3f0036;
   border-radius: 5px;
-  border: 1px solid #03045e;
+  border: 1px solid #3f0036;
   background-color: #8081c069;
   width: 100%;
   display: flex;
@@ -173,7 +174,7 @@ th {
   cursor: pointer;
 }
 .edit-menu-option {
-  border: 1px solid #03045e;
+  border: 1px solid #3f0036;
   border-radius: 4px;
   padding: 5px;
   /* margin-right: 5px; */
@@ -182,8 +183,8 @@ th {
   cursor: pointer;
 }
 /* .old-menu-option {
-  border: 1px solid #03045e;
-  color: #03045e;
+  border: 1px solid #3f0036;
+  color: #3f0036;
   background-color: #8081c069;
 } */
 .fa-angle-down {
@@ -197,13 +198,13 @@ th {
 }
 .font-weight-bold {
   font-weight: bold;
-  color: #03045e;
+  color: #3f0036;
 }
 .form-control:focus,
 .form-select:focus {
   color: #212529;
   background-color: transparent;
-  border-color: #03045e !important;
+  border-color: #3f0036 !important;
   outline: 0;
   box-shadow: none !important;
 }
@@ -228,7 +229,7 @@ th {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #03045e;
+  background: #3f0036;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .lds-ellipsis div:nth-child(1) {
@@ -319,7 +320,7 @@ input[type="number"]::-webkit-outer-spin-button {
     120deg,
     #e5e5e5 30%,
     #f0f0f0 38%,
-    #03045e 40%,
+    #3f0036 40%,
     #e5e5e5 48%
   );
   background-size: 200% 100%;
@@ -332,7 +333,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 .add-user-button {
-  background-color: #03045e;
+  background-color: #3f0036;
   color: ghostwhite;
   border: none !important;
   outline: none !important;
@@ -340,7 +341,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 5px;
 }
 .add-user-button:active {
-  color: #03045e !important;
+  color: #3f0036 !important;
   background-color: ghostwhite !important;
   font-weight: bold;
   border-radius: 5px !important;
@@ -350,16 +351,16 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 3px;
 }
 .fa-user-large {
-  border: 1px solid #03045e;
+  border: 1px solid #3f0036;
   padding: 6px 6px 6px 7px;
-  color: #03045e;
+  color: #3f0036;
   border-radius: 50%;
 }
 .user-name {
   color: #fff;
 }
 .your-order {
-  color: #03045e;
+  color: #3f0036;
   font-weight: bold;
 }
 .right-arrow-menu {
@@ -370,11 +371,11 @@ input[type="number"]::-webkit-outer-spin-button {
   /* background-image: url("https://app.doofies.in/assets/images/banner.jpg"); */
   background-image: linear-gradient(
     to right top,
-    #0f0c29,
-    #151537,
-    #1e1c45,
-    #262454,
-    #302b63
+    #051937,
+    #14173b,
+    #23133d,
+    #310c3b,
+    #3f0036
   );
   height: 100vh;
 }
@@ -400,8 +401,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .opened-menu {
-  text-transform: capitalize;
-  color: #fff !important;
+  text-transform: capitalize !important;
 }
 
 .opened-menu-container {
@@ -413,4 +413,110 @@ input[type="number"]::-webkit-outer-spin-button {
 .input-label {
   /* font-family: "Roboto", sans-serif; */
   font-family: "Work Sans", sans-serif;
+}
+@import url("https://fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Beginner:wght@500&display=swap");
+.errorPage {
+  font-family: "Edu VIC WA NT Beginner", cursive !important;
+  font-size: 70px;
+  color: #3f0036;
+}
+.password-container {
+  position: relative;
+}
+.fa-eye,
+.fa-eye-slash {
+  color: #3f0036;
+  position: absolute;
+  top: 35px;
+  right: 20px;
+  cursor: pointer;
+}
+.tesark-login-logo {
+  width: 70px !important;
+  height: 70px !important;
+  border: 2px solid #3f0036;
+  border-radius: 5px;
+  margin-left: 2px;
+  position: absolute;
+  bottom: 244px;
+}
+.errorAlert {
+  position: absolute;
+  top: 20px;
+}
+/* background-image: linear-gradient(to right top, #051937, #14173b, #23133d, #310c3b, #3f0036); */
+.user-page {
+  height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(
+    to right top,
+    #051937,
+    #14173b,
+    #23133d,
+    #310c3b,
+    #3f0036
+  );
+}
+@import url("https://fonts.googleapis.com/css2?family=Coda&display=swap");
+.user-welcome-greet {
+  font-family: "Coda", cursive !important;
+  color: #fff;
+  letter-spacing: 1.5px;
+  font-size: 20px;
+  margin-bottom: 0;
+  margin-top: 92px !important;
+}
+.user-content {
+  margin-top: 100px;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap");
+.snack-qoute {
+  color: #fff;
+  letter-spacing: 1px;
+  font-weight: 900;
+  font-size: 3rem;
+  font-family: "Source Sans Pro", sans-serif !important;
+}
+.snack-name {
+  color: #5ffbf1 !important;
+  text-transform: capitalize !important;
+}
+
+.error-svg {
+  width: 100%;
+  height: 40vh;
+}
+.App {
+  background-color: #180024 !important;
+}
+.App {
+  background-image: url("./assets/undraw_working_from_anywhere_re_9obt.svg");
+  height: 100%;
+  background-position: right bottom !important;
+  object-fit: cover !important;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #180024;
+}
+.login-form {
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
+  padding: 10px;
+  border-radius: 4px;
+  position: relative;
+}
+.login-email:focus {
+  background-color: #fff !important;
+}
+
+.App::-webkit-scrollbar {
+  display: none !important;
+  overflow: hidden !important;
+}
+@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap");
+.login-greet {
+  color: #fff;
+  font-size: 35px;
+  font-family: "Kaushan Script", cursive !important;
 }

@@ -1,5 +1,24 @@
 const axios = require("axios").default;
 
+// lookup--
+export async function lookUp(token) {
+  // console.log(token, "token");
+  try {
+    let isValidtoken = await axios.post(
+      "http://localhost:5000/lookUp/authToken",
+      " ",
+      {
+        headers: {
+          authorization: window.localStorage.getItem("app_token"),
+        },
+      }
+    );
+    return isValidtoken.data;
+  } catch (error) {
+    console.log("--lookup-error--", error);
+  }
+}
+
 // login--
 export async function login(data) {
   try {
@@ -7,9 +26,10 @@ export async function login(data) {
     return token;
   } catch (error) {
     console.log("--login-error--", error);
+    throw error;
+    // return error;
   }
 }
-console.log(window.localStorage.getItem("app_token"), "questionRepoToken");
 export async function getTemplates() {
   try {
     let templates = await axios.get("http://localhost:5000/templates", {
@@ -145,11 +165,12 @@ export async function getOpenedTemplate() {
 export async function addSubMisssion(data) {
   try {
     console.log(data, "submission data");
-    await axios.post("http://localhost:5000/addSnack", data, {
+    let placeOrder = await axios.post("http://localhost:5000/addSnack", data, {
       headers: {
         authorization: window.localStorage.getItem("app_token"),
       },
     });
+    console.log(placeOrder, "placeOrder");
   } catch (error) {
     console.log("post menu error", error);
   }
@@ -217,7 +238,7 @@ export async function getClosedStatus(userID) {
     let findData = submissions.data.filter((data) => {
       return data.userId === userID;
     });
-    console.log(findData[findData.length - 1], "findData");
+    // console.log(findData[findData.length - 1], "findData");
     return findData[findData.length - 1];
   } catch (error) {
     console.log("--api-getTemplates-error--", error);
