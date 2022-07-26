@@ -114,7 +114,7 @@ function Login() {
               </div>
               <div className="row mb-5 pb-3">
                 <div className="col-md-4 d-flex justify-content-center">
-                  <p className="login-greet">Welcome to tesark...</p>
+                  <p className="login-greet">welcome to tesark...</p>
                 </div>
               </div>
               <div className="col-md-4 login-form">

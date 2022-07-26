@@ -36,13 +36,6 @@ function Submission() {
           <div className="col-lg-12 d-flex justify-content-end mt-2 ">
             <button
               onClick={() => {
-                todaySubmission();
-              }}
-            >
-              getSubmits
-            </button>
-            <button
-              onClick={() => {
                 setSrcByDate("");
               }}
               className="refresh"
