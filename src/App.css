@@ -4,6 +4,36 @@
   padding: 0;
   box-sizing: border-box;
 }
+/* 768 */
+@media only screen and (max-width: 600px) {
+  .tool-bar {
+    display: none;
+  }
+  .material-drawer {
+    display: block;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .tool-bar {
+    display: none;
+  }
+  .material-drawer {
+    display: block;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .tool-bar {
+    display: block;
+  }
+  .material-drawer {
+    display: none;
+  }
+}
+
 .fa-house,
 .fa-rectangle-list,
 .fa-paper-plane,
@@ -333,7 +363,6 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 .add-user-button {
-  background-color: #3f0036;
   color: ghostwhite;
   border: none !important;
   outline: none !important;
@@ -390,6 +419,28 @@ input[type="number"]::-webkit-outer-spin-button {
   cursor: pointer;
   background-color: #fff !important;
 }
+
+.tesark-logo2R {
+  height: 30px;
+  padding: 4px;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fff !important;
+}
+.userNAmeDrawer {
+  padding: 18px;
+}
+.user-drawer {
+  color: #3f0036;
+  font-size: larger;
+}
+.user-drawer1 {
+  color: #3f0036;
+  font-size: larger;
+  font-weight: bold;
+}
+
 .tesark-logo2:hover {
   border: 2px solid #fff;
 }
@@ -519,4 +570,78 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #fff;
   font-size: 35px;
   font-family: "Kaushan Script", cursive !important;
+}
+.menu-button-drawer {
+  border: none !important;
+}
+/* ---------- */
+
+.fa-bars {
+  font-size: 30px;
+  padding: 10px;
+  border: none !important;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 24px;
+}
+.fa-circle {
+  font-size: 15px;
+  color: #3f0036;
+}
+.active-menu-label {
+  border-radius: 10px !important;
+  border-left: 6px solid #3f0036 !important;
+  margin-bottom: 5px;
+}
+
+.deletebtn-icon {
+  border: 1px solid red !important;
+  color: red !important;
+  padding-top: 1px;
+  padding-left: 8px;
+  border-radius: 3px;
+  padding-right: 8px;
+  padding-bottom: 6px;
+  background-color: #fff;
+}
+.table-container {
+  height: 460px;
+  overflow: auto;
+  overflow-x: none !important;
+}
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #3f0036;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #3f0036;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: grey;
+}
+.search-user {
+  width: 13rem;
+}
+.refresh {
+  margin-left: 5px;
+  padding: 5px 8px 5px 8px;
+  border: 1px solid #e99797;
+  border-radius: 3px;
+  background-color: #fff;
+  color: #d62f2f;
+  margin-right: 3px;
+}
+.user-error-alert {
+  margin-left: 9px;
 }

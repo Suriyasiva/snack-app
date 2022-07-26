@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Button, InputAdornment } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AuthProvider, { authProviderContext } from "../Providers/AuthProvider";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -10,6 +9,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
@@ -17,12 +18,31 @@ function Users() {
   const contextValues = useContext(authProviderContext);
   // add user dialog box
   const [addUserOpen, setAddUserOpen] = React.useState(false);
+  const [searchName, setSearchName] = React.useState("");
+  const [disable, setDisable] = React.useState(false);
   const handleAddUserOpen = () => {
     setAddUserOpen(true);
   };
   const handleAddUserClose = () => {
     setAddUserOpen(false);
   };
+  // ---------------------
+  const [ShowError, setShowError] = React.useState("Retry");
+  const [catchErr, setCatchErr] = React.useState({
+    OpenError: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, OpenError } = catchErr;
+
+  const openError = (newState) => {
+    setCatchErr({ OpenError: true, ...newState });
+  };
+
+  const closeError = () => {
+    setCatchErr({ ...catchErr, OpenError: false });
+  };
+
   // ---------------------
   const formik = useFormik({
     initialValues: {
@@ -33,11 +53,24 @@ function Users() {
       password: "",
     },
     onSubmit: async (values, { resetForm }) => {
-      await contextValues.addUser(values);
-      await contextValues.userData();
-      resetForm();
-      handleAddUserClose();
-      console.log(values);
+      try {
+        setDisable(true);
+        await contextValues.addUser(values);
+        await contextValues.userData();
+        resetForm();
+        handleAddUserClose();
+        console.log(values);
+      } catch (error) {
+        console.log(error);
+        await setShowError(error.response.data.message);
+        openError({
+          vertical: "top",
+          horizontal: "center",
+        });
+        resetForm();
+      } finally {
+        setDisable(false);
+      }
     },
     validate: (values) => {
       const errors = {};
@@ -72,9 +105,16 @@ function Users() {
     setOpen(false);
   };
   const handleDelete = async (id) => {
-    await contextValues.deleteUser(id);
-    await contextValues.userData();
-    setOpen(false);
+    try {
+      setDisable(true);
+      await contextValues.deleteUser(id);
+      await contextValues.userData();
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDisable(false);
+    }
   };
 
   useEffect(() => {
@@ -88,7 +128,7 @@ function Users() {
         <div className="row">
           <div className="col-sm-12">
             <div className="row">
-              <div className="col-sm-12 d-flex justify-content-end mt-3">
+              <div className="col-sm-12 d-flex justify-content-end mt-2">
                 <button onClick={handleAddUserOpen} className="menu-add-Button">
                   <span className="button_top">
                     &nbsp;<i className="fa-solid fa-plus"></i>User&nbsp;
@@ -205,6 +245,12 @@ function Users() {
                                 </div>
                                 <div className="col-sm-6 dialogbox-submit">
                                   <input
+                                    disabled={disable}
+                                    style={{
+                                      backgroundColor: disable
+                                        ? "rgb(159 86 148)"
+                                        : "#3f0036",
+                                    }}
                                     className="add-user-button"
                                     type={"submit"}
                                     value="Add User"
@@ -222,13 +268,25 @@ function Users() {
               </div>
             </div>
             <div className="row">
-              <div className="col-sm-12">
-                <div className="bd-example">
+              <div className="col-sm-12 d-flex justify-content-end">
+                <input
+                  className="form-control search-user mt-2"
+                  type={"text"}
+                  placeholder={"Search..."}
+                  onChange={(e) => {
+                    setSearchName(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="row ">
+              <div className="col-sm-12 mt-2 table-container">
+                <div className="bd-example ">
                   <table className="table table-hover table-menu ">
-                    <thead>
-                      <tr className="font-weight-bold">
+                    <thead className="">
+                      <tr className="font-weight-bold ">
                         <th scope="col">#</th>
-                        <th scope="col"> User Name</th>
+                        <th scope="col">User Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>
                         <th scope="col">Action</th>
@@ -244,66 +302,75 @@ function Users() {
                           <td>{loaders}</td>
                         </tr>
                       ) : (
-                        usersData.map((user, index) => {
-                          return (
-                            <tr>
-                              <th scope="row">{index + 1}</th>
-                              <td className="view-Menu">
-                                <strong>{user.userName}</strong>
-                              </td>
-                              <td>{user.email}</td>
-                              <td>{user.role}</td>
-                              <td>
-                                <Link
-                                  to={`/admin/editUser/${user._id}`}
-                                  className="menu-edit-button  m-2"
-                                >
-                                  <i className="fa-solid fa-pen-to-square"></i>
-                                  &nbsp; Edit
-                                </Link>
-                                <Button
-                                  onClick={handleClickOpen}
-                                  className="m-2"
-                                  variant="outlined"
-                                  color="error"
-                                  startIcon={<DeleteIcon />}
-                                >
-                                  Delete
-                                </Button>
-                                <div>
-                                  <Dialog
-                                    open={open}
-                                    onClose={handleClose}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
+                        usersData
+                          .filter((srcItem) => {
+                            if (searchName === "") {
+                              return srcItem;
+                            } else if (
+                              srcItem.userName
+                                .toLowerCase()
+                                .includes(searchName.toLowerCase())
+                            ) {
+                              return srcItem;
+                            }
+                          })
+                          .map((user, index) => {
+                            return (
+                              <tr>
+                                <th scope="row">{index + 1}</th>
+                                <td className="view-Menu ">
+                                  <strong>{user.userName}</strong>
+                                </td>
+                                <td>{user.email}</td>
+                                <td>{user.role}</td>
+                                <td>
+                                  <Link
+                                    to={`/admin/editUser/${user._id}`}
+                                    className="menu-edit-button  m-2"
                                   >
-                                    <DialogTitle id="alert-dialog-title">
-                                      {"Are You Sure?"}
-                                    </DialogTitle>
-                                    <DialogContent>
-                                      <DialogContentText id="alert-dialog-description">
-                                        Do You Want to Delete the User ?
-                                      </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-                                      <Button onClick={handleClose}>
-                                        Cancel
-                                      </Button>
-                                      <Button
-                                        onClick={() => {
-                                          handleDelete(user._id);
-                                        }}
-                                        autoFocus
-                                      >
-                                        Delete
-                                      </Button>
-                                    </DialogActions>
-                                  </Dialog>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
+                                    <i className="fa-solid fa-pen-to-square"></i>
+                                  </Link>
+                                  <button
+                                    onClick={handleClickOpen}
+                                    className="m-2 deletebtn-icon"
+                                  >
+                                    <i className="fa-solid fa-trash-can"></i>
+                                  </button>
+                                  <div>
+                                    <Dialog
+                                      open={open}
+                                      onClose={handleClose}
+                                      aria-labelledby="alert-dialog-title"
+                                      aria-describedby="alert-dialog-description"
+                                    >
+                                      <DialogTitle id="alert-dialog-title">
+                                        {"Are You Sure?"}
+                                      </DialogTitle>
+                                      <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                          Do You Want to Delete the User ?
+                                        </DialogContentText>
+                                      </DialogContent>
+                                      <DialogActions>
+                                        <Button onClick={handleClose}>
+                                          Cancel
+                                        </Button>
+                                        <Button
+                                          disabled={disable}
+                                          onClick={() => {
+                                            handleDelete(user._id);
+                                          }}
+                                          autoFocus
+                                        >
+                                          Delete
+                                        </Button>
+                                      </DialogActions>
+                                    </Dialog>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
                       )}
                     </tbody>
                   </table>
@@ -311,6 +378,16 @@ function Users() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="row">
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={OpenError}
+            onClose={closeError}
+            key={vertical + horizontal}
+          >
+            <Alert severity="error">{ShowError}</Alert>
+          </Snackbar>
         </div>
       </div>
     </>

@@ -12,6 +12,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 function Menu() {
   const [open, setOpen] = React.useState(false);
+  const [disable, setDisable] = React.useState(false);
+  var loaders = <div className="card_load_extreme_title"></div>;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -26,6 +28,7 @@ function Menu() {
 
   const changeIsOpened = async (id) => {
     try {
+      setDisable(true);
       console.log(id, "id");
       const contextData = contextValues.templateData;
       var findId = contextData.findIndex((data) => {
@@ -33,7 +36,7 @@ function Menu() {
       });
       console.log(contextData[findId], "findId");
       let changeData = await axios.put(
-        `http://localhost:5000/manageStatus/isOpened/${id}`,
+        `https://tesark-server.herokuapp.com/manageStatus/isOpened/${id}`,
         {
           isOpened: contextData[findId].isOpened ? false : true,
         },
@@ -47,12 +50,21 @@ function Menu() {
       // console.log("changeData", changeData);
     } catch (error) {
       console.log("changeIsOpened error", error);
+    } finally {
+      setDisable(false);
     }
   };
   let deleteMenu = async (id) => {
-    await contextValues.deleteTemplate(id);
-    contextValues.menuData();
-    setOpen(false);
+    try {
+      setDisable(true);
+      await contextValues.deleteTemplate(id);
+      contextValues.menuData();
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDisable(false);
+    }
   };
   return (
     <>
@@ -72,8 +84,8 @@ function Menu() {
                 </Link>
               </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-sm-12">
+            <div className="row mt-3 ">
+              <div className="col-sm-12 table-container">
                 <div className="bd-example">
                   <table className="table table-hover table-menu ">
                     <thead>
@@ -86,101 +98,109 @@ function Menu() {
                       </tr>
                     </thead>
                     <tbody>
-                      {optionValues.map((data, index) => {
-                        return (
-                          <tr>
-                            <th scope="row">{index + 1}</th>
-                            <td className="view-Menu">
-                              <strong
-                                onClick={() => {
-                                  console.log(data._id);
-                                }}
-                              >
-                                {data.name}
-                              </strong>
-                            </td>
-                            {data.isOpened ? (
-                              <td style={{ color: "green" }}>Active</td>
-                            ) : (
-                              <td style={{ color: "red" }}>InActive</td>
-                            )}
-                            <td>
-                              <Link
-                                to={`/admin/editMenu/${data._id}`}
-                                className="menu-edit-button  m-2"
-                              >
-                                <i className="fa-solid fa-pen-to-square"></i>{" "}
-                                Edit
-                              </Link>
-
-                              <Button
-                                onClick={handleClickOpen}
-                                className="m-2"
-                                variant="outlined"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                              >
-                                Delete
-                              </Button>
-                              <div>
-                                <Dialog
-                                  open={open}
-                                  onClose={handleClose}
-                                  aria-labelledby="alert-dialog-title"
-                                  aria-describedby="alert-dialog-description"
+                      {optionValues.length === 0 ? (
+                        <tr>
+                          <th>{loaders}</th>
+                          <td>{loaders}</td>
+                          <td>{loaders}</td>
+                          <td>{loaders}</td>
+                          <td>{loaders}</td>
+                        </tr>
+                      ) : (
+                        optionValues.map((data, index) => {
+                          return (
+                            <tr>
+                              <th scope="row">{index + 1}</th>
+                              <td className="view-Menu">
+                                <strong
+                                  onClick={() => {
+                                    console.log(data._id);
+                                  }}
                                 >
-                                  <DialogTitle id="alert-dialog-title">
-                                    {"Are You Sure?"}
-                                  </DialogTitle>
-                                  <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                      Do You Want to Delete the Menu ?
-                                    </DialogContentText>
-                                  </DialogContent>
-                                  <DialogActions>
-                                    <Button onClick={handleClose}>
-                                      Cancel
-                                    </Button>
-                                    <Button
-                                      onClick={() => {
-                                        deleteMenu(data._id);
-                                      }}
-                                      autoFocus
-                                    >
-                                      Delete
-                                    </Button>
-                                  </DialogActions>
-                                </Dialog>
-                              </div>
-                            </td>
-                            <td>
+                                  {data.name}
+                                </strong>
+                              </td>
                               {data.isOpened ? (
-                                <Button
-                                  onClick={() => {
-                                    changeIsOpened(data._id);
-                                  }}
-                                  variant="outlined"
-                                  color="error"
-                                >
-                                  &nbsp;<i className="fa-solid fa-xmark"></i>
-                                  &nbsp;&nbsp;
-                                </Button>
+                                <td style={{ color: "green" }}>Active</td>
                               ) : (
-                                <Button
-                                  onClick={() => {
-                                    changeIsOpened(data._id);
-                                  }}
-                                  variant="outlined"
-                                  color="success"
-                                >
-                                  &nbsp;<i className="fa-solid fa-check"></i>
-                                  &nbsp;&nbsp;
-                                </Button>
+                                <td style={{ color: "red" }}>InActive</td>
                               )}
-                            </td>
-                          </tr>
-                        );
-                      })}
+                              <td>
+                                <Link
+                                  to={`/admin/editMenu/${data._id}`}
+                                  className="menu-edit-button  m-2"
+                                >
+                                  <i className="fa-solid fa-pen-to-square"></i>
+                                </Link>
+                                <button
+                                  onClick={handleClickOpen}
+                                  className="m-2 deletebtn-icon"
+                                >
+                                  <i className="fa-solid fa-trash-can"></i>
+                                </button>
+                                <div>
+                                  <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                  >
+                                    <DialogTitle id="alert-dialog-title">
+                                      {"Are You Sure?"}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                      <DialogContentText id="alert-dialog-description">
+                                        Do You Want to Delete the Menu ?
+                                      </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button onClick={handleClose}>
+                                        Cancel
+                                      </Button>
+                                      <Button
+                                        disabled={disable}
+                                        onClick={() => {
+                                          deleteMenu(data._id);
+                                        }}
+                                        autoFocus
+                                      >
+                                        Delete
+                                      </Button>
+                                    </DialogActions>
+                                  </Dialog>
+                                </div>
+                              </td>
+                              <td>
+                                {data.isOpened ? (
+                                  <Button
+                                    onClick={() => {
+                                      changeIsOpened(data._id);
+                                    }}
+                                    disabled={disable}
+                                    variant="outlined"
+                                    color="error"
+                                  >
+                                    &nbsp;<i className="fa-solid fa-xmark"></i>
+                                    &nbsp;&nbsp;
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    disabled={disable}
+                                    onClick={() => {
+                                      changeIsOpened(data._id);
+                                    }}
+                                    variant="outlined"
+                                    color="success"
+                                  >
+                                    &nbsp;<i className="fa-solid fa-check"></i>
+                                    &nbsp;&nbsp;
+                                  </Button>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>

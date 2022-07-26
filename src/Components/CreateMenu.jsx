@@ -5,28 +5,63 @@ import { useFormik } from "formik";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
 import Provider, { providerContext } from "../Providers/Provider";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function CreateMenu() {
   let navigate = useNavigate();
+  let [handleError, setHandleError] = React.useState("Retry");
+  let [btnDisable, setBtnDisable] = React.useState(false);
+
+  // handle err--
+  const [catchErr, setCatchErr] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = catchErr;
+
+  const ShowError = (newState) => {
+    setCatchErr({ open: true, ...newState });
+  };
+
+  const closeError = () => {
+    setCatchErr({ ...catchErr, open: false });
+  };
+
+  // -------------
   const formik = useFormik({
     initialValues: {
       selectedType: "",
       name: "",
     },
-    onSubmit: (values, { resetForm }) => {
-      console.log({ ...values, options: menudata });
-      if (menudata.length === 0) {
-        setOptionAlert(true);
-      } else {
-        setOptionAlert(false);
-        contextValues.addtemplate({
-          ...values,
-          isOpened: false,
-          options: menudata,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        setBtnDisable(true);
+        console.log({ ...values, options: menudata });
+        if (menudata.length === 0) {
+          setOptionAlert(true);
+        } else {
+          setOptionAlert(false);
+          await contextValues.addtemplate({
+            ...values,
+            isOpened: false,
+            options: menudata,
+          });
+          resetForm();
+          navigate("/admin/menu");
+        }
+      } catch (error) {
+        await setHandleError(error.response.data.message);
+        ShowError({
+          vertical: "top",
+          horizontal: "center",
         });
+        console.log(error);
         resetForm();
-        navigate("/admin/menu");
+      } finally {
+        setBtnDisable(false);
       }
     },
     validate: (values) => {
@@ -75,6 +110,18 @@ function CreateMenu() {
                 >
                   &nbsp;Back
                 </Button>
+              </div>
+            </div>
+            <div className="row">
+              <div>
+                <Snackbar
+                  anchorOrigin={{ vertical, horizontal }}
+                  open={open}
+                  onClose={closeError}
+                  key={vertical + horizontal}
+                >
+                  <Alert severity="error">{handleError}</Alert>
+                </Snackbar>
               </div>
             </div>
             {/* ----create- menu---- */}
@@ -200,14 +247,22 @@ function CreateMenu() {
               <div className="row mt-4">
                 <div className="col-sm-10 d-flex justify-content-end mt-2">
                   <Button
+                    disabled={btnDisable}
                     type="submit"
                     style={{
-                      backgroundColor: "#3f0036",
+                      backgroundColor: btnDisable
+                        ? "rgb(159 86 148)"
+                        : "#3f0036",
                       color: "#fff",
                     }}
                     variant="raised"
                   >
-                    Submit
+                    Submit&nbsp;
+                    {btnDisable ? (
+                      <CircularProgress sx={{ color: "#fff" }} size="1rem" />
+                    ) : (
+                      ""
+                    )}
                   </Button>
                 </div>
               </div>

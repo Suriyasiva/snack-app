@@ -4,14 +4,39 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import Provider, { providerContext } from "../Providers/Provider";
 import { Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 function EditMenu() {
   let navigate = useNavigate();
+  //
+  const [alert, setAlert] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const [emptyMenu, setEmptyMenu] = React.useState({ message: "" });
+  const [ShowErr, setShowErr] = React.useState("");
+  const { vertical, horizontal, open } = alert;
+
+  const handleClick = (newState) => {
+    setAlert({ open: true, ...newState });
+  };
+
+  const handleClose = () => {
+    setAlert({ ...alert, open: false });
+  };
+  // --------------------------
+  const [disable, setDisable] = useState(false);
   const [optionValues, setoptionValues] = useState([]);
   const [optionValue, setoptionValue] = useState("");
   let addOption = () => {
     if (optionValue) {
-      setoptionValues([...optionValues, { id: Date.now(), name: optionValue }]);
+      setoptionValues([
+        ...optionValues,
+        { _id: Date.now(), name: optionValue },
+      ]);
       setoptionValue("");
     }
   };
@@ -30,17 +55,37 @@ function EditMenu() {
       name: "",
       selectedType: "",
     },
-    onSubmit: async (values) => {
-      delete values._id;
-      delete values.__v;
-      console.log(values, "editvalues");
-      console.log(templateData.options, "editvalues1");
-      console.log(...optionValues, "editvalues2");
-      await contextValues.editTemplate(params.id, {
-        ...values,
-        options: [...optionValues, ...templateData.options],
-      });
-      navigate(-1);
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        if (templateData.options.length === 0 && optionValues.length === 0) {
+          handleClick({
+            vertical: "top",
+            horizontal: "center",
+          });
+          setEmptyMenu({ message: "menu list is empty — check it out!" });
+        } else {
+          setDisable(true);
+          delete values._id;
+          delete values.__v;
+          console.log(values, "editvalues");
+          console.log(templateData.options, "editvalues1");
+          console.log(...optionValues, "editvalues2");
+          await contextValues.editTemplate(params.id, {
+            ...values,
+            options: [...optionValues, ...templateData.options],
+          });
+          navigate(-1);
+        }
+      } catch (error) {
+        console.log(error);
+        await setShowErr(error.response.data.message);
+        handleClick({
+          vertical: "top",
+          horizontal: "center",
+        });
+      } finally {
+        setDisable(false);
+      }
     },
   });
   var templateData = contextValues.singleTemplateData;
@@ -72,6 +117,18 @@ function EditMenu() {
                 >
                   &nbsp;Back
                 </Button>
+              </div>
+            </div>
+            <div className="row">
+              <div className="">
+                <Snackbar
+                  anchorOrigin={{ vertical, horizontal }}
+                  open={open}
+                  onClose={handleClose}
+                  key={vertical + horizontal}
+                >
+                  <Alert severity="error">{emptyMenu.message || ShowErr}</Alert>
+                </Snackbar>
               </div>
             </div>
             <div className="row mt-4">
@@ -204,14 +261,20 @@ function EditMenu() {
               <div className="row">
                 <div className="col-sm-10 d-flex justify-content-end mt-4">
                   <Button
+                    disabled={disable}
                     style={{
-                      backgroundColor: "#3f0036",
+                      backgroundColor: disable ? "rgb(159 86 148)" : "#3f0036",
                       color: "#fff",
                     }}
                     variant="raised"
                     type="submit"
                   >
-                    Submit
+                    Submit&nbsp;
+                    {disable ? (
+                      <CircularProgress sx={{ color: "#fff" }} size="1rem" />
+                    ) : (
+                      ""
+                    )}
                   </Button>
                 </div>
               </div>

@@ -52,7 +52,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/user/*" element={<User loader={loader} />} />
         <Route path="/admin/*" element={<Admin loader={loader} />} />
-        <Route path="/dummyPage" element={<DummyPage />} />
+        {/* <Route path="/dummyPage" element={<DummyPage />} /> */}
         <Route path="*" element={<Page404 />} />
       </Routes>
     </>

@@ -17,6 +17,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import undraw_coffee_with_friends_3cbj from "../assets/undraw_coffee_with_friends_3cbj (1).svg";
 import TESARKImage from "../assets/TESARKImage.svg";
 
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import { fontWeight } from "@mui/system";
+
 function TransitionLeft(props) {
   return <Slide {...props} direction="left" />;
 }
@@ -36,6 +40,10 @@ function User(props) {
   };
 
   // --------
+  const [drawerOPen, setDrawerOPen] = React.useState(false);
+
+  // --------
+  const [error, setError] = React.useState({ display: false, message: "" });
   console.log(props.loader, "loader-user");
   let navigate = useNavigate();
   let location = useLocation();
@@ -97,9 +105,7 @@ function User(props) {
   // console.log(option, "submit options");
 
   let logOut = () => {
-    window.localStorage.removeItem("app_token");
-    window.localStorage.removeItem("userName");
-    window.localStorage.removeItem("userId");
+    window.localStorage.clear();
     navigate("/");
   };
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
@@ -136,16 +142,25 @@ function User(props) {
     }
   }, [contextValues.submissionUserstatus]);
   let handleSubmit = async () => {
-    await setDisable(true);
-    await contextValues.addSubMisssion({ ...option, status: "Closed" });
-    setOpen(false);
-    setSnackBarOpen(true);
-    setTimeout(() => {
-      snackHandleClose();
-      setSelectView(true);
-    }, 3000);
-    contextValues.getRecentSubmission(window.localStorage.getItem("userId"));
-    handleClick(TransitionLeft);
+    try {
+      await setDisable(true);
+      await contextValues.addSubMisssion({ ...option, status: "Closed" });
+      setOpen(false);
+      setSnackBarOpen(true);
+      setTimeout(() => {
+        snackHandleClose();
+        setSelectView(true);
+      }, 3000);
+      contextValues.getRecentSubmission(window.localStorage.getItem("userId"));
+      handleClick(TransitionLeft);
+    } catch (error) {
+      await setError({ display: true, message: error.response.data });
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setError({ display: false, message: "" });
+      }, 2000);
+    }
   };
   return (
     <>
@@ -153,15 +168,15 @@ function User(props) {
         <>
           <div className="container-fluid user-bacjground">
             {/*---top bar---*/}
-            <div className="row ">
+            <div className="row tool-bar">
               <div className="col-sm-12">
-                <div className="d-flex justify-content-between align-items-center mt-4">
+                <div className=" d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-center ">
                   <img
                     src={TESARKImage}
                     alt="logoWithName"
-                    className="ms-3 img-fluid tesark-logo2"
+                    className="ms-3 img-fluid tesark-logo2 mt-4"
                   />
-                  <div className="me-2 user-box">
+                  <div className="me-2 user-box mt-4">
                     <i className="fa-solid fa-user-large border border-white p-2 text-white me-2"></i>
                     <b className="user-name ">
                       {window.localStorage.getItem("userName")}
@@ -169,7 +184,7 @@ function User(props) {
                     <Button
                       onClick={logOut}
                       color="secondary"
-                      className="me-3 ms-3"
+                      className="me-3 ms-3 login-res"
                       variant="contained"
                     >
                       LogOut
@@ -178,16 +193,63 @@ function User(props) {
                 </div>
               </div>
             </div>
-            {/* --greet-- */}
-            {/* <div className="row mt-5">
-              <div className="col-sm-12 d-flex justify-content-center">
-                <div
-                  className="text-light p-3 greeting-user display-4"
-                >
-                  welcome to tesark
-                </div>
-              </div>
-            </div> */}
+            {/* -----------drwer------------- */}
+            <div className="material-drawer">
+              <i
+                onClick={() => {
+                  setDrawerOPen(true);
+                }}
+                className="fa-solid fa-bars"
+              ></i>
+              <Drawer
+                anchor="left"
+                open={drawerOPen}
+                onClose={() => {
+                  setDrawerOPen(false);
+                }}
+              >
+                <Box p={2} width="250px" role="presentation">
+                  <div className="d-flex justify-content-between align-items-center ">
+                    <img
+                      src={TESARKImage}
+                      alt="logoWithName"
+                      className=" img-fluid tesark-logo2R"
+                    />
+                    <i
+                      style={{
+                        color: "#3f0036",
+                        fontSize: "25px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setDrawerOPen(false);
+                      }}
+                      className="fa-solid fa-circle-chevron-left"
+                    ></i>
+                  </div>
+                  <hr />
+                  <div className="d-flex justify-content-between flex-column">
+                    <div className=" d-flex justify-content-start align-items-center userNAmeDrawer">
+                      <i className="fa-solid fa-user user-drawer"></i>&nbsp;
+                      <span className="user-drawer1">
+                        &nbsp;
+                        {window.localStorage.getItem("userName")}
+                      </span>
+                    </div>
+                    <Button
+                      onClick={logOut}
+                      style={{
+                        backgroundColor: "#3f0036",
+                      }}
+                      className="me-3 ms-3 login-resR"
+                      variant="contained"
+                    >
+                      LogOut &nbsp;<i className="fa-solid fa-power-off"></i>
+                    </Button>
+                  </div>
+                </Box>
+              </Drawer>
+            </div>
             {/*--select--*/}
             <div className="row mt-5">
               <div className="col-lg-6 d-flex justify-content-center">
@@ -287,9 +349,9 @@ function User(props) {
                     </div>
                     <div className="mt-2">
                       <div style={{ display: optionAlert ? "block" : "none" }}>
-                        <Stack sx={{ width: "100%" }} spacing={2}>
+                        <Stack sx={{ width: "18.5rem" }} spacing={2}>
                           <Alert severity="error">
-                            Please Select The Menu !!!
+                            please select the menu !!!
                           </Alert>
                         </Stack>
                       </div>
@@ -367,6 +429,16 @@ function User(props) {
                   className="img-fluid user-r-imag"
                   alt="coffee-user"
                 />
+              </div>
+            </div>
+            <div className="row user-error-alert">
+              <div
+                style={{ display: error.display ? "block" : "none" }}
+                className="col-lg-3 col-sm-12 col-md-4"
+              >
+                <Alert severity="error" color="error">
+                  {error.message}
+                </Alert>
               </div>
             </div>
           </div>

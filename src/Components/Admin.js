@@ -52,7 +52,7 @@ function Admin(props) {
                   <Button
                     onClick={logOut}
                     color="error"
-                    className="me-3"
+                    className="me-4"
                     variant="outlined"
                   >
                     LogOut

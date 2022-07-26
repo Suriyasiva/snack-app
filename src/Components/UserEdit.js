@@ -4,11 +4,32 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import AuthProvider, { authProviderContext } from "../Providers/AuthProvider";
 import { useParams } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+
 function UserEdit() {
   const contextValues = useContext(authProviderContext);
+  const [disable, setDisable] = React.useState(false);
   let params = useParams();
   let navigate = useNavigate();
   let setValuesdata = contextValues.singleUserData;
+  // ------
+  const [err, setErr] = React.useState("");
+  const [catchErr, setCatchErr] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = catchErr;
+
+  const ShowError = (newState) => {
+    setCatchErr({ open: true, ...newState });
+  };
+
+  const closeError = () => {
+    setCatchErr({ ...catchErr, open: false });
+  };
+  // ------
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -17,17 +38,28 @@ function UserEdit() {
       phoneNumber: "",
     },
     onSubmit: async (values, { resetForm }) => {
-      console.log(values, "editvalues");
-      let payload = {
-        userName: values.userName,
-        email: values.email,
-        role: values.role,
-        phoneNumber: values.phoneNumber,
-      };
-      console.log(payload, "editvalues");
-      await contextValues.editUser(params.id, payload);
-      resetForm();
-      navigate(-1);
+      try {
+        setDisable(true);
+        console.log(values, "editvalues");
+        let payload = {
+          userName: values.userName,
+          email: values.email,
+          role: values.role,
+          phoneNumber: values.phoneNumber,
+        };
+        console.log(payload, "editvalues");
+        await contextValues.editUser(params.id, payload);
+        navigate(-1);
+      } catch (error) {
+        await setErr(error.response.data.message);
+        console.log(error);
+        await ShowError({
+          vertical: "top",
+          horizontal: "center",
+        });
+      } finally {
+        setDisable(false);
+      }
     },
   });
   useEffect(() => {
@@ -61,6 +93,21 @@ function UserEdit() {
                 </Button>
               </div>
             </div>
+            <div className="row">
+              <div>
+                <Snackbar
+                  anchorOrigin={{ vertical, horizontal }}
+                  open={open}
+                  onClose={closeError}
+                  key={vertical + horizontal}
+                >
+                  <Alert severity="error">
+                    This is an error alert — <strong>check it out!</strong>
+                  </Alert>
+                </Snackbar>
+              </div>
+            </div>
+
             <div className="row">
               <div className="col-lg-12 mt-2 ">
                 <h4>Edit User</h4>
@@ -128,6 +175,12 @@ function UserEdit() {
                   <div className="row mt-1">
                     <div className="col-sm-12 dialogbox-submit">
                       <input
+                        disabled={disable}
+                        style={{
+                          backgroundColor: disable
+                            ? "rgb(159 86 148)"
+                            : "#3f0036",
+                        }}
                         className="add-user-button mt-2"
                         type={"submit"}
                         value="Submit"
