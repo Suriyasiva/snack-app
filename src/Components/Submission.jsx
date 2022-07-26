@@ -6,7 +6,6 @@ function Submission() {
   const contextValues = useContext(providerContext);
   let currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
   const [srcByDate, setSrcByDate] = useState("");
-  const [getSubmits, setSubmits] = useState([]);
   useEffect(() => {
     contextValues.submissions();
   }, []);
@@ -22,12 +21,6 @@ function Submission() {
     } finally {
       setDisable(false);
     }
-  };
-  let todaySubmission = () => {
-    let subData = contextValues.submissionData.filter((item) => {
-      return item.createdAt === currentDate;
-    });
-    console.log(subData, "datas");
   };
   return (
     <>
@@ -82,7 +75,7 @@ function Submission() {
                   ) : (
                     contextValues.submissionData
                       .filter((item) => {
-                        if (srcByDate == "") {
+                        if (srcByDate === "") {
                           console.log(srcByDate, "1");
                           return item;
                         } else if (
