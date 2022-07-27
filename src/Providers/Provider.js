@@ -12,6 +12,7 @@ import {
   changeStatus,
   checkingStatus,
   getClosedStatus,
+  getTodaySubmits,
 } from "../Questionrepository/QuestionRepo";
 export const providerContext = React.createContext(" ");
 function Provider(props) {
@@ -22,6 +23,7 @@ function Provider(props) {
   const [submissionData, setSubmissionData] = React.useState([]);
   const [submissionUserstatus, setSubmissionUserStatus] = React.useState([]);
   const [closedUserData, setClosedUserData] = React.useState({});
+  const [recentSubmits, setRecentSubmits] = React.useState({});
   let menuData = () => {
     getTemplates()
       .then((res) => {
@@ -88,6 +90,15 @@ function Provider(props) {
         console.log(err, "finding error");
       });
   };
+  let todaySubmits = () => {
+    getTodaySubmits()
+      .then((res) => {
+        setRecentSubmits(res);
+      })
+      .catch((err) => {
+        console.log(err, "finding error");
+      });
+  };
   const contextObject = {
     templateData: templateData,
     menuData: menuData,
@@ -109,6 +120,8 @@ function Provider(props) {
     submissionUserstatus: submissionUserstatus,
     getRecentSubmission: getRecentSubmission,
     closedUserData: closedUserData,
+    todaySubmits: todaySubmits,
+    recentSubmits: recentSubmits,
   };
   return (
     <>

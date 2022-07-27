@@ -129,11 +129,11 @@ function Users() {
           <div className="col-sm-12">
             <div className="row">
               <div className="col-sm-12 d-flex justify-content-end mt-2">
-                <button onClick={handleAddUserOpen} className="menu-add-Button">
+                {/* <button onClick={handleAddUserOpen} className="menu-add-Button">
                   <span className="button_top">
                     &nbsp;<i className="fa-solid fa-plus"></i>User&nbsp;
                   </span>
-                </button>
+                </button> */}
                 <Dialog
                   open={addUserOpen}
                   TransitionComponent={Transition}
@@ -268,7 +268,7 @@ function Users() {
               </div>
             </div>
             <div className="row">
-              <div className="col-sm-12 d-flex justify-content-end">
+              <div className="col-sm-12 d-flex justify-content-between">
                 <input
                   className="form-control search-user mt-2"
                   type={"text"}
@@ -277,6 +277,14 @@ function Users() {
                     setSearchName(e.target.value);
                   }}
                 />
+                <button
+                  onClick={handleAddUserOpen}
+                  className="menu-add-Button mt-2"
+                >
+                  <span className="button_top">
+                    &nbsp;<i className="fa-solid fa-plus"></i>User&nbsp;
+                  </span>
+                </button>
               </div>
             </div>
             <div className="row ">
@@ -318,11 +326,22 @@ function Users() {
                             return (
                               <tr>
                                 <th scope="row">{index + 1}</th>
-                                <td className="view-Menu ">
+                                <td
+                                  className="view-Menu "
+                                  style={{
+                                    textTransform: "capitalize",
+                                  }}
+                                >
                                   <strong>{user.userName}</strong>
                                 </td>
                                 <td>{user.email}</td>
-                                <td>{user.role}</td>
+                                <td
+                                  style={{
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {user.role}
+                                </td>
                                 <td>
                                   <Link
                                     to={`/admin/editUser/${user._id}`}

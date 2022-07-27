@@ -297,3 +297,14 @@ export async function getClosedStatus(userID) {
     console.log("--api-getTemplates-error--", error);
   }
 }
+
+export async function getTodaySubmits() {
+  try {
+    let getSubmitCounts = await axios.get(
+      "https://tesark-server.herokuapp.com/submissionList/getSubmits/list"
+    );
+    return getSubmitCounts.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

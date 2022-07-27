@@ -1,14 +1,32 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useContext, useState } from "react";
 import Provider, { providerContext } from "../Providers/Provider";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 function Submission() {
   const [disable, setDisable] = useState(false);
   const contextValues = useContext(providerContext);
   let currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
   const [srcByDate, setSrcByDate] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     contextValues.submissions();
+    contextValues.todaySubmits();
   }, []);
+  useEffect(() => {
+    if (Object.keys(contextValues.recentSubmits).length) {
+      console.log("data fetched");
+    }
+  }, [contextValues.recentSubmits]);
   // console.log(contextValues.submissionData, "submissionData");
   var loaders = <div className="card_load_extreme_title"></div>;
   let handleStatus = async (id, status) => {
@@ -29,6 +47,15 @@ function Submission() {
           <div className="col-lg-12 d-flex justify-content-end mt-2 ">
             <button
               onClick={() => {
+                console.log(contextValues.recentSubmits, "submits response");
+                handleClickOpen();
+              }}
+              className="refresh"
+            >
+              Get Count
+            </button>
+            <button
+              onClick={() => {
                 setSrcByDate("");
               }}
               className="refresh"
@@ -46,6 +73,77 @@ function Submission() {
               <i class="fa-solid fa-arrow-down-wide-short"></i>
             </Button>
           </div>
+        </div>
+        <div>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle
+              id="alert-dialog-title"
+              style={{ background: "rgb(209 181 205)" }}
+            >
+              <b className="today-submits-heading ">{"Today Submits"}</b>
+              <hr className="hrDivider" />
+            </DialogTitle>
+            <DialogContent style={{ background: "rgb(209 181 205)" }}>
+              <DialogContentText id="alert-dialog-description">
+                <div className=" ms-1">
+                  {Object.keys(contextValues.recentSubmits).length === 0 ? (
+                    <div>""</div>
+                  ) : (
+                    Object.entries(contextValues.recentSubmits.todayCounts).map(
+                      ([key, value], index) => {
+                        return (
+                          <>
+                            <div
+                              key={index + 1}
+                              className="d-flex justify-content-between align-items-center"
+                            >
+                              <div
+                                style={{
+                                  textTransform: "capitalize",
+                                  fontWeight: "bold",
+                                  color: "black",
+                                }}
+                              >
+                                {key}
+                              </div>
+                              <div
+                                style={{
+                                  marginRight: "8px",
+                                  fontWeight: "bold",
+                                  color: "black",
+                                }}
+                              >
+                                {value}
+                              </div>
+                            </div>
+                            <hr className="hrDivider" />
+                          </>
+                        );
+                      }
+                    )
+                  )}
+                  <div className="d-flex justify-content-end me-2">
+                    <div
+                      className="mt-1"
+                      style={{ fontWeight: "bold", color: "black" }}
+                    >
+                      Total = {contextValues.recentSubmits.total}
+                    </div>
+                  </div>
+                </div>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions style={{ background: "rgb(209 181 205)" }}>
+              <Button color="error" onClick={handleClose} autoFocus>
+                close
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
         <div className="row">
           <div className="col-sm-12 table-container">
@@ -91,10 +189,22 @@ function Submission() {
                         return (
                           <tr>
                             <th scope="row">{index + 1}</th>
-                            <td className="fw-bold">{data.userName}</td>
+                            <td
+                              className="fw-bold"
+                              style={{
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {data.userName}
+                            </td>
                             <td>{data.userId}</td>
                             <td>{data.createdAt}</td>
-                            <td className="font-weight-bold">
+                            <td
+                              className="font-weight-bold"
+                              style={{
+                                textTransform: "capitalize",
+                              }}
+                            >
                               {data.selected[0]}
                             </td>
                             <td> {data.status}</td>
