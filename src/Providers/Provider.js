@@ -7,23 +7,27 @@ import {
   editTemplate,
   getOpenedTemplate,
   addSubMisssion,
-  // logedUserDetails,
   getSubmissions,
   changeStatus,
   checkingStatus,
   getClosedStatus,
   getTodaySubmits,
+  getAllOpenedTemplates,
+  getClosedSubmissions,
 } from "../Questionrepository/QuestionRepo";
 export const providerContext = React.createContext(" ");
 function Provider(props) {
   const [templateData, setTemplateData] = React.useState([]);
   const [singleTemplateData, setSingleTemplateData] = React.useState({});
   const [isOpenedMenu, setIsOpenedMenu] = React.useState({});
-  // const [logedUserData, setLogedUserData] = React.useState({});
   const [submissionData, setSubmissionData] = React.useState([]);
   const [submissionUserstatus, setSubmissionUserStatus] = React.useState([]);
   const [closedUserData, setClosedUserData] = React.useState({});
   const [recentSubmits, setRecentSubmits] = React.useState({});
+  // -----
+  const [OpenedTemplates, setAllopenedTemplates] = React.useState([]);
+  // ----
+  const [userSubmissions, setUserSubmissions] = React.useState([]);
   let menuData = () => {
     getTemplates()
       .then((res) => {
@@ -51,15 +55,7 @@ function Provider(props) {
         console.log(error);
       });
   };
-  // let logedUser = (id) => {
-  //   logedUserDetails(id)
-  //     .then((res) => {
-  //       setLogedUserData(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+
   let submissions = () => {
     getSubmissions()
       .then((res) => {
@@ -72,6 +68,7 @@ function Provider(props) {
   let checkStatus = (id) => {
     checkingStatus(id)
       .then((res) => {
+        // console.log(res, "--------checkStatus res-------");
         setSubmissionUserStatus([...res]);
         // console.log(res, "--------checkStatus res-------");
       })
@@ -99,6 +96,27 @@ function Provider(props) {
         console.log(err, "finding error");
       });
   };
+  // ---------------------------------------------------------------
+  let allOpenedTemplates = () => {
+    getAllOpenedTemplates()
+      .then((res) => {
+        setAllopenedTemplates(res);
+      })
+      .catch((err) => {
+        console.log(err, "getAllOpenedTemplates");
+      });
+  };
+
+  let getUserClosedSubmissions = (data) => {
+    getClosedSubmissions(data)
+      .then((res) => {
+        // console.log(res, "---getUserClosedSubmissions--");
+        setUserSubmissions(res);
+      })
+      .catch((err) => {
+        console.log(err, "getUserSubmits error");
+      });
+  };
   const contextObject = {
     templateData: templateData,
     menuData: menuData,
@@ -111,8 +129,6 @@ function Provider(props) {
     openedTemplate: openedTemplate,
     isOpenedMenu: isOpenedMenu,
     addSubMisssion: addSubMisssion,
-    // logedUser: logedUser,
-    // logedUserData: logedUserData,
     submissions: submissions,
     submissionData: submissionData,
     changeStatus: changeStatus,
@@ -122,6 +138,12 @@ function Provider(props) {
     closedUserData: closedUserData,
     todaySubmits: todaySubmits,
     recentSubmits: recentSubmits,
+    // ---------
+    allOpenedTemplates: allOpenedTemplates,
+    OpenedTemplates: OpenedTemplates,
+
+    getUserClosedSubmissions: getUserClosedSubmissions,
+    userSubmissions: userSubmissions,
   };
   return (
     <>

@@ -209,22 +209,11 @@ export async function addSubMisssion(data) {
         },
       }
     );
-    console.log(placeOrder, "placeOrder");
   } catch (error) {
     console.log("post menu error", error);
     throw error;
   }
 }
-// export async function logedUserDetails(id) {
-//   try {
-//     let logedUsers = await axios.get(
-//       `https://61f0e50b072f86001749eedf.mockapi.io/tesarkUsers/${id}`
-//     );
-//     return logedUsers.data;
-//   } catch (error) {
-//     console.log("--api-getTemplates-error--", error);
-//   }
-// }
 
 export async function getSubmissions() {
   try {
@@ -257,6 +246,7 @@ export async function changeStatus(id, data) {
     console.log("put--method--error", error);
   }
 }
+// ------------------------------------------------------------------------
 export async function checkingStatus(logedUserId) {
   try {
     let submissions = await axios.get(
@@ -278,7 +268,6 @@ export async function checkingStatus(logedUserId) {
 }
 export async function getClosedStatus(userID) {
   try {
-    console.log(userID, "getting id");
     let submissions = await axios.get(
       "https://tesark-server.herokuapp.com/submissions",
       {
@@ -297,14 +286,53 @@ export async function getClosedStatus(userID) {
     console.log("--api-getTemplates-error--", error);
   }
 }
+// ------------------------------------------------------------------------
 
 export async function getTodaySubmits() {
   try {
     let getSubmitCounts = await axios.get(
-      "https://tesark-server.herokuapp.com/submissionList/getSubmits/list"
+      "https://tesark-server.herokuapp.com/submissionList/getSubmits/list",
+      {
+        headers: {
+          authorization: window.localStorage.getItem("app_token"),
+        },
+      }
     );
     return getSubmitCounts.data;
   } catch (error) {
     console.log(error);
+  }
+}
+
+// opened templates------
+export async function getAllOpenedTemplates() {
+  try {
+    let openedTemplate = await axios.get(
+      "https://tesark-server.herokuapp.com/templates",
+      {
+        headers: {
+          authorization: window.localStorage.getItem("app_token"),
+        },
+      }
+    );
+    // return openedTemplate.data;
+    var opt = openedTemplate.data.filter((menu) => {
+      return menu.isOpened === true;
+    });
+    return opt;
+  } catch (error) {
+    console.log("--api-getTemplates-error--", error);
+  }
+}
+
+export async function getClosedSubmissions(data) {
+  try {
+    let submissionData = await axios.post(
+      "http://localhost:5000/getSubmission/check/Submissions",
+      data
+    );
+    return submissionData.data;
+  } catch (error) {
+    console.log("--getClosedSubmissions-error--", error);
   }
 }

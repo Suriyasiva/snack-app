@@ -9,7 +9,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 function Submission() {
   const [disable, setDisable] = useState(false);
   const contextValues = useContext(providerContext);
-  let currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
+  // let currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
+  const current = new Date();
+  const currentDate = `${current.getDate()}/${
+    current.getMonth() + 1
+  }/${current.getFullYear()}`;
+  console.log(currentDate);
   const [srcByDate, setSrcByDate] = useState("");
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -86,13 +91,14 @@ function Submission() {
               style={{ background: "rgb(209 181 205)" }}
             >
               <b className="today-submits-heading ">{"Today Submits"}</b>
+              <b>{currentDate}</b>
               <hr className="hrDivider" />
             </DialogTitle>
             <DialogContent style={{ background: "rgb(209 181 205)" }}>
               <DialogContentText id="alert-dialog-description">
                 <div className=" ms-1">
                   {Object.keys(contextValues.recentSubmits).length === 0 ? (
-                    <div>""</div>
+                    <div>"no submits"</div>
                   ) : (
                     Object.entries(contextValues.recentSubmits.todayCounts).map(
                       ([key, value], index) => {
@@ -153,8 +159,8 @@ function Submission() {
                   <tr className="font-weight-bold">
                     <th scope="col">#</th>
                     <th scope="col">User Name</th>
-                    <th scope="col">User ID</th>
-                    <th scope="col">Created At</th>
+                    <th scope="col">Template</th>
+                    <th scope="col">Submitted At</th>
                     <th scope="col">Selected Menu</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -177,7 +183,7 @@ function Submission() {
                           console.log(srcByDate, "1");
                           return item;
                         } else if (
-                          item.createdAt
+                          item.submittedAt
                             .toLowerCase()
                             .includes(srcByDate.toLowerCase())
                         ) {
@@ -197,8 +203,8 @@ function Submission() {
                             >
                               {data.userName}
                             </td>
-                            <td>{data.userId}</td>
-                            <td>{data.createdAt}</td>
+                            <td>{data.templateName}</td>
+                            <td>{data.submittedAt}</td>
                             <td
                               className="font-weight-bold"
                               style={{

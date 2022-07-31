@@ -1,173 +1,213 @@
 import React, { useState, useEffect, useContext } from "react";
 import Provider, { providerContext } from "../Providers/Provider";
-import Select from "react-select";
 import { Button } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
-import Snackbar from "@mui/material/Snackbar";
-import Slide from "@mui/material/Slide";
+import { useNavigate } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import undraw_coffee_with_friends_3cbj from "../assets/undraw_coffee_with_friends_3cbj (1).svg";
 import TESARKImage from "../assets/TESARKImage.svg";
-
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { fontWeight } from "@mui/system";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
-function TransitionLeft(props) {
-  return <Slide {...props} direction="left" />;
-}
-// -----user component------
-function User(props) {
-  // --------
-  const colourStyles = {
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-      // const color = chroma(data.color);
-      console.log({ data, isDisabled, isFocused, isSelected });
-      return {
-        ...styles,
-        backgroundColor: isFocused ? "#5FFBF1" : null,
-        color: "#3f0036",
-      };
-    },
+// ---------------------------------menuComponent---------------------------------------------
+let MenuComponent = (props) => {
+  const { templateName, options, templateId, submissionDatas } = props;
+  let contextValues = useContext(providerContext);
+  useEffect(() => {
+    contextValues.allOpenedTemplates();
+  }, []);
+  // console.log(submissionDatas, "submissionDatas");------------
+  // usestate----
+  const [optionselected, setoptionSelected] = useState({});
+  const [openAlert, setOpenAlert] = React.useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const [showMessage, setShowMessage] = useState({
+    error: false,
+    message: "",
+  });
+  // ------snack bar------
+  const { vertical, horizontal, open } = openAlert;
+  // ------submisssion------
+  let submitMenus = async () => {
+    try {
+      await contextValues.addSubMisssion({
+        selected: [optionselected.menu],
+        userId: window.localStorage.getItem("userId"),
+        templateId: optionselected.templateId,
+        userName: window.localStorage.getItem("userName"),
+        templateName: optionselected.templateName,
+        status: "Closed",
+      });
+      utlisFuncytions(true, "submitted Successfully");
+    } catch (error) {
+      console.log(error);
+      utlisFuncytions(true, error.response.data.message);
+    }
   };
-
-  // --------
-  const [drawerOPen, setDrawerOPen] = React.useState(false);
-
-  // --------
-  const [error, setError] = React.useState({ display: false, message: "" });
-  console.log(props.loader, "loader-user");
-  let navigate = useNavigate();
-  let location = useLocation();
-  let path = location.pathname;
-  console.log(path.startsWith("/admin"), "startsWith");
+  let submissionData = () => {
+    Object.keys(optionselected).length === 0
+      ? utlisFuncytions(false, "Please Select the Menu")
+      : submitMenus();
+  };
+  // functions---------------------------
+  let utlisFuncytions = async (alert, message) => {
+    await setShowMessage({
+      error: alert,
+      message: message,
+    });
+    await setOpenAlert({ open: true, vertical: "top", horizontal: "center" });
+    setTimeout(() => {
+      setOpenAlert({
+        open: false,
+        vertical: "top",
+        horizontal: "center",
+      });
+    }, 3000);
+  };
+  return (
+    <>
+      {/* -------snack bar------- */}
+      <div>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={open}
+          key={vertical + horizontal}
+        >
+          <Alert
+            severity={showMessage.error ? "success" : "error"}
+            variant="filled"
+          >
+            {showMessage.message}
+          </Alert>
+        </Snackbar>
+      </div>
+      {/* -------snack bar end----------- */}
+      <div
+        className="card opened-menu-card"
+        style={{
+          width: "25rem",
+          margin: "10px",
+        }}
+      >
+        <div className="card-body">
+          <h5 className="card-title ">
+            <b>
+              {templateName}
+              <br />
+            </b>
+          </h5>
+          {submissionDatas.map((data) => {
+            return <div>{data.status}</div>;
+          })}
+          <div className="d-flex flex-wrap ">
+            {options.map((menu, i) => {
+              let isSelected = optionselected.menu === menu.name;
+              return (
+                <div
+                  key={i}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => {
+                    setoptionSelected({
+                      templateName: templateName,
+                      menu: menu.name,
+                      templateId: templateId,
+                    });
+                  }}
+                  className={isSelected ? "menu-card1" : "menu-card"}
+                >
+                  {menu.name}
+                </div>
+              );
+            })}
+          </div>
+          <div className="d-flex justify-content-end mt-2">
+            <Button
+              disabled={
+                submissionDatas.length !== 0 &&
+                submissionDatas.map((data) => {
+                  if ((data.status = "Closed")) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                })
+              }
+              className="me-2"
+              onClick={() => {
+                submissionData();
+              }}
+              variant="contained"
+              color="secondary"
+            >
+              submit
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+// ---------------------------------------------------------------------------------------
+function User(props) {
+  // src = { undraw_coffee_with_friends_3cbj };
+  // ------useContext Hook------
+  const contextValues = useContext(providerContext);
+  // -------useEffect hooks-------
   useEffect(() => {
     if (!window.localStorage.getItem("app_token")) {
-      // alert("--no token--");
       navigate("/");
     }
   }, []);
-  const [open, setOpen] = React.useState(false);
-  const [option, setOption] = React.useState({});
-  const [optionAlert, setOptionAlert] = React.useState(false);
-  const handleClickOpen = () => {
-    if (Object.keys(option).length === 0) {
-      // alert("no menu is selected");
-      setOptionAlert(true);
-    } else {
-      setOptionAlert(false);
-      setOpen(true);
-    }
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const contextValues = useContext(providerContext);
+  // ------------geting all opened template --------------------
   useEffect(() => {
-    contextValues.openedTemplate();
-    contextValues.checkStatus(window.localStorage.getItem("userId"));
-    contextValues.getRecentSubmission(window.localStorage.getItem("userId"));
+    contextValues.allOpenedTemplates();
   }, []);
-  useEffect(() => {
-    if (Object.keys(contextValues.isOpenedMenu).length) {
-    }
-  }, [contextValues.isOpenedMenu]);
-  var selectOption =
-    Object.keys(contextValues.isOpenedMenu).length === 0
-      ? {
-          value: "loading",
-          label: "loading",
-        }
-      : contextValues.isOpenedMenu.options.map((opt) => {
-          return {
-            value: opt.id,
-            label: opt.name,
-          };
-        });
-  let selectedOption = (e) => {
-    // console.log(e.label, "target ");
-    setOption({
-      selected: [e.label],
-      userId: window.localStorage.getItem("userId"),
-      templateId: contextValues.isOpenedMenu._id,
-      userName: window.localStorage.getItem("userName"),
-    });
-  };
-  // console.log(option, "submit options");
+  // --------------waiting for state changes---------------------
 
+  let [openedTemplates, setOpenedTemplates] = React.useState([]);
+
+  useEffect(() => {
+    let openedTemplateIds = contextValues.OpenedTemplates.map((data) => {
+      return data._id;
+    });
+    setOpenedTemplates(openedTemplateIds);
+  }, [contextValues.OpenedTemplates]);
+
+  useEffect(() => {
+    if (openedTemplates.length === 0) {
+      console.log("empty state");
+    } else {
+      // console.log(openedTemplates, "state changed");
+      contextValues.getUserClosedSubmissions({
+        userId: window.localStorage.getItem("userId"),
+        templateId: openedTemplates,
+      });
+    }
+  }, [openedTemplates]);
+
+  // ------otherHooks--------
+  let navigate = useNavigate();
+
+  // ----useStates----
+  const [drawerOPen, setDrawerOPen] = React.useState(false);
+
+  // -------logOut Functions---------
   let logOut = () => {
     window.localStorage.clear();
     navigate("/");
-  };
-  const [snackBarOpen, setSnackBarOpen] = React.useState(false);
-  const [transition, setTransition] = React.useState(undefined);
-  const [selectView, setSelectView] = React.useState(false);
-  const [isDisable, setDisable] = React.useState(false);
-  const snackHandleClose = () => {
-    setSnackBarOpen(false);
-  };
-  const handleClick = (Transition) => () => {
-    setTransition(() => Transition);
-    setSnackBarOpen(true);
-    setTimeout(() => {
-      snackHandleClose();
-    }, 3000);
-  };
-
-  let getMenuStatus = (data) => {
-    data.filter((subdata) => {
-      if (
-        subdata.status === "Closed" &&
-        subdata.userId === window.localStorage.getItem("userId")
-      ) {
-        setSelectView(true);
-        // var a = parseInt(subdata.userId);
-      } else {
-        setSelectView(false);
-      }
-    });
-  };
-  useEffect(() => {
-    if (contextValues.submissionUserstatus.length !== 0) {
-      getMenuStatus(contextValues.submissionUserstatus);
-    }
-  }, [contextValues.submissionUserstatus]);
-  let handleSubmit = async () => {
-    try {
-      await setDisable(true);
-      await contextValues.addSubMisssion({ ...option, status: "Closed" });
-      setOpen(false);
-      setSnackBarOpen(true);
-      setTimeout(() => {
-        snackHandleClose();
-        setSelectView(true);
-      }, 3000);
-      contextValues.getRecentSubmission(window.localStorage.getItem("userId"));
-      handleClick(TransitionLeft);
-    } catch (error) {
-      await setError({ display: true, message: error.response.data });
-      console.log(error);
-    } finally {
-      setTimeout(() => {
-        setError({ display: false, message: "" });
-      }, 2000);
-    }
   };
   return (
     <>
       {props.loader ? (
         <>
-          <div className="container-fluid user-bacjground">
-            {/*---top bar---*/}
+          <div className="container-fluid user-background">
+            {/* -----------------------------------top bar----------------------------------- */}
             <div className="row tool-bar">
               <div className="col-sm-12">
                 <div className=" d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-center ">
@@ -250,195 +290,29 @@ function User(props) {
                 </Box>
               </Drawer>
             </div>
-            {/*--select--*/}
-            <div className="row mt-5">
-              <div className="col-lg-6 d-flex justify-content-center">
-                <div>
-                  <div
-                    style={{ display: selectView ? "none" : "inline" }}
-                    className="col-sm-8 mt-5 "
-                  >
-                    <p className="user-welcome-greet">
-                      Hi,
-                      <span style={{ color: "#5FFBF1" }}>
-                        {window.localStorage.getItem("userName")}
-                      </span>{" "}
-                      !
-                    </p>
-                    <p className="snack-qoute m-0  p-0">
-                      Keep Clam & Order your <br /> Favourite &nbsp;
-                      <span className="snack-name">
-                        {contextValues.isOpenedMenu.name}
-                      </span>
-                    </p>
-                    <div className="d-flex d-flex ">
-                      <div style={{ width: "300px", marginRight: "3px" }}>
-                        <Select
-                          options={selectOption}
-                          className="basic-multi-select"
-                          classNamePrefix="select"
-                          styles={colourStyles}
-                          onChange={selectedOption}
-                        />
-                      </div>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleClickOpen}
-                      >
-                        Order
-                      </Button>
-                      <div>
-                        <Dialog
-                          open={open}
-                          fullWidth
-                          onClose={handleClose}
-                          aria-labelledby="alert-dialog-title"
-                          aria-describedby="alert-dialog-description"
-                        >
-                          <DialogTitle id="alert-dialog-title">
-                            Confirm Your Order ?
-                          </DialogTitle>
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                              <div
-                                style={{ color: "#3f0036" }}
-                                className="your-order"
-                              >
-                                <span className="text-dark">Your Order:</span>{" "}
-                                {contextValues.isOpenedMenu.name}&nbsp;
-                                <i className="fa-solid fa-chevron-right right-arrow-menu"></i>
-                                &nbsp;
-                                <span style={{ color: "tomato" }}>
-                                  {option.selected}
-                                </span>
-                              </div>
-                            </DialogContentText>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleClose}>Cancel</Button>
-                            <Button
-                              onClick={handleSubmit}
-                              disabled={isDisable}
-                              autoFocus
-                            >
-                              Place Order
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                        {/* snack bar */}
-                        <div className="snackBar">
-                          <Snackbar
-                            open={snackBarOpen}
-                            onClose={snackHandleClose}
-                            TransitionComponent={transition}
-                            message="Order Placed"
-                            key={transition ? transition.name : ""}
-                          >
-                            <Alert
-                              onClose={snackHandleClose}
-                              open={snackBarOpen}
-                              severity="success"
-                              sx={{ width: "100%" }}
-                            >
-                              Order Placed successfully
-                            </Alert>
-                          </Snackbar>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <div style={{ display: optionAlert ? "block" : "none" }}>
-                        <Stack sx={{ width: "18.5rem" }} spacing={2}>
-                          <Alert severity="error">
-                            please select the menu !!!
-                          </Alert>
-                        </Stack>
-                      </div>
-                    </div>
-                  </div>
-                  {selectView ? (
-                    <div className="ms-3">
-                      <p className="user-welcome-greet ">
-                        Hi,
-                        <span style={{ color: "#5FFBF1" }}>
-                          {window.localStorage.getItem("userName")}
-                        </span>{" "}
-                        !
-                      </p>
-                      <p className="snack-qoute m-0  p-0">
-                        Your
-                        <span className="">
-                          {Object.keys(contextValues.closedUserData).length ===
-                          0 ? (
-                            <span>
-                              <CircularProgress
-                                sx={{ color: "#fff" }}
-                                size="1rem"
-                              />
-                            </span>
-                          ) : (
-                            <span
-                              className="opened-menu"
-                              style={{ color: "#5FFBF1" }}
-                            >
-                              &nbsp;
-                              {contextValues.closedUserData.selected[0]}
-                            </span>
-                          )}
-                        </span>
-                        &nbsp;will Arrive Soon.
-                      </p>
-                      <p
-                        style={{ color: "#fff", fontSize: "20px" }}
-                        className=""
-                      >
-                        be Patience and have fun .
-                      </p>
-                      {/* <div className=" opened-menu-container text-white">
-                        Opened Menu:
-                        <span className="opened-menu">
-                          &nbsp;
-                          {contextValues.isOpenedMenu.name}
-                        </span>
-                      </div> */}
-                      {/* <div className=" opened-menu-container text-white">
-                        Selected Item:
-                        {Object.keys(contextValues.closedUserData).length ===
-                        0 ? (
-                          <span>Loading...</span>
-                        ) : (
-                          <span
-                            className="opened-menu"
-                            style={{ color: "whitesmoke" }}
-                          >
-                            &nbsp;
-                            {contextValues.closedUserData.selected[0]}
-                          </span>
+            {/* -----------------------------------select----------------------------------- */}
+            <div className="row">
+              <div className="col-lg-12">
+                {contextValues.OpenedTemplates.length === 0 ? (
+                  <div style={{ color: "#fff" }}>Loading....</div>
+                ) : (
+                  contextValues.OpenedTemplates.map((data) => {
+                    // console.log(contextValues.userSubmissions);
+                    // contextValues.userSubmissions.map((submits) => {});
+                    return (
+                      <MenuComponent
+                        templateName={data.name}
+                        options={data.options}
+                        templateId={data._id}
+                        submissionDatas={contextValues.userSubmissions.filter(
+                          (o) => {
+                            return o.templateId === data._id;
+                          }
                         )}
-                      </div> */}
-                    </div>
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
-              </div>
-              <div className="col-lg-6 d-flex justify-content-center">
-                <img
-                  src={undraw_coffee_with_friends_3cbj}
-                  className="img-fluid user-r-imag"
-                  alt="coffee-user"
-                />
-              </div>
-            </div>
-            <div className="row user-error-alert">
-              <div
-                style={{ display: error.display ? "block" : "none" }}
-                className="col-lg-3 col-sm-12 col-md-4"
-              >
-                <Alert severity="error" color="error">
-                  {error.message}
-                </Alert>
+                      />
+                    );
+                  })
+                )}
               </div>
             </div>
           </div>
