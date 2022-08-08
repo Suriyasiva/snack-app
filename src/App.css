@@ -5,12 +5,28 @@
   box-sizing: border-box;
 }
 /* 768 */
+.userpage-tesark-logo {
+  height: 33px;
+  width: 33px;
+  border-radius: 5px;
+  border: 1px solid #3f0036;
+  margin-top: 24px;
+}
 @media only screen and (max-width: 600px) {
   .tool-bar {
     display: none;
   }
   .material-drawer {
     display: block;
+  }
+  .user-background {
+    height: 100vh;
+    background-image: url("./assets/undraw_coffee_with_friends_3cbj\ \(1\).svg"),
+      linear-gradient(to right top, #051937, #14173b, #23133d, #310c3b, #3f0036) !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    object-fit: cover;
   }
 }
 
@@ -22,6 +38,15 @@
   .material-drawer {
     display: block;
   }
+  .user-background {
+    height: 100vh;
+    background-image: url("./assets/undraw_coffee_with_friends_3cbj\ \(1\).svg"),
+      linear-gradient(to right top, #051937, #14173b, #23133d, #310c3b, #3f0036) !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    object-fit: cover;
+  }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -31,6 +56,14 @@
   }
   .material-drawer {
     display: none;
+  }
+  .user-background {
+    height: 100vh;
+    background-image: url("./assets/undraw_coffee_with_friends_3cbj\ \(1\).svg"),
+      linear-gradient(to right top, #051937, #14173b, #23133d, #310c3b, #3f0036) !important;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-attachment: fixed;
   }
 }
 
@@ -396,22 +429,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 13px;
   font-weight: bold;
 }
-.user-background {
-  height: 100vh;
-  background-image: /*url("./assets/undraw_coffee_with_friends_3cbj\ \(1\).svg"), */ linear-gradient(
-    to right top,
-    #051937,
-    #14173b,
-    #23133d,
-    #310c3b,
-    #3f0036
-  );
 
-  background-repeat: no-repeat;
-  background-position: right;
-  background-size: contain;
-  background-attachment: fixed;
-}
 .tesark-logo1 {
   height: 28px;
 }
@@ -672,4 +690,42 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: #7b1fa2;
   color: #fff;
   font-size: large;
+}
+/* -----------user loader------------- */
+.btnLoader {
+  border: 4px solid #7b1fa2;
+  border-left-color: transparent;
+  border-radius: 50%;
+}
+
+.btnLoader {
+  border: 4px solid #7b1fa2;
+  border-left-color: transparent;
+  width: 36px;
+  height: 36px;
+}
+
+.btnLoader {
+  border: 4px solid #7b1fa2;
+  border-left-color: transparent;
+  width: 20px;
+  height: 20px;
+  animation: spin89345 1s linear infinite;
+}
+
+@keyframes spin89345 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+.menu-titles {
+  font-family: "Open Sans", sans-serif !important;
+  font-weight: 600;
+  font-size: 20px;
 }

@@ -14,6 +14,7 @@ import {
   getTodaySubmits,
   getAllOpenedTemplates,
   getClosedSubmissions,
+  statusActive,
 } from "../Questionrepository/QuestionRepo";
 export const providerContext = React.createContext(" ");
 function Provider(props) {
@@ -144,6 +145,8 @@ function Provider(props) {
 
     getUserClosedSubmissions: getUserClosedSubmissions,
     userSubmissions: userSubmissions,
+
+    statusActive: statusActive,
   };
   return (
     <>

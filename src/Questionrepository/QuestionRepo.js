@@ -123,6 +123,7 @@ export async function getUserData() {
   }
 }
 export async function deleteUser(id) {
+  console.log(id, "repo");
   try {
     await axios.delete(`https://tesark-server.herokuapp.com/deleteUser/${id}`, {
       headers: {
@@ -328,11 +329,32 @@ export async function getAllOpenedTemplates() {
 export async function getClosedSubmissions(data) {
   try {
     let submissionData = await axios.post(
-      "http://localhost:5000/getSubmission/check/Submissions",
-      data
+      "https://tesark-server.herokuapp.com/getSubmission/check/Submissions",
+      data,
+      {
+        headers: {
+          authorization: window.localStorage.getItem("app_token"),
+        },
+      }
     );
     return submissionData.data;
   } catch (error) {
     console.log("--getClosedSubmissions-error--", error);
+  }
+}
+
+export async function statusActive() {
+  try {
+    await axios.put(
+      "https://tesark-server.herokuapp.com/submissionsUpdate/update/status",
+      "",
+      {
+        headers: {
+          authorization: window.localStorage.getItem("app_token"),
+        },
+      }
+    );
+  } catch (error) {
+    console.log("--status active-error--", error);
   }
 }

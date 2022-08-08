@@ -45,11 +45,25 @@ function Submission() {
       setDisable(false);
     }
   };
+  let handleActiveAll = async () => {
+    await contextValues.statusActive();
+    await contextValues.submissions();
+  };
   return (
     <>
       <div className="container">
         <div className="row">
           <div className="col-lg-12 d-flex justify-content-end mt-2 ">
+            <Button
+              onClick={() => {
+                handleActiveAll();
+              }}
+              className="refresh"
+              color="error"
+              variant="outlined"
+            >
+              Active All
+            </Button>
             <button
               onClick={() => {
                 console.log(contextValues.recentSubmits, "submits response");

@@ -79,6 +79,8 @@ function Login() {
       }
       if (!values.password) {
         errors.password = "required";
+      } else if (values.password.length <= 6) {
+        errors.password = "invalid password !";
       }
       return errors;
     },

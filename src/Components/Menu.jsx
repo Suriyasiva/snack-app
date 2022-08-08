@@ -56,6 +56,7 @@ function Menu() {
   };
   let deleteMenu = async (id) => {
     try {
+      console.log(id);
       setDisable(true);
       await contextValues.deleteTemplate(id);
       contextValues.menuData();
@@ -133,7 +134,14 @@ function Menu() {
                                   <i className="fa-solid fa-pen-to-square"></i>
                                 </Link>
                                 <button
-                                  onClick={handleClickOpen}
+                                  // onClick={handleClickOpen}
+                                  // onClick={() => {
+                                  //   console.log(data._id, data.name);
+                                  // }}
+                                  disabled={disable}
+                                  onClick={() => {
+                                    deleteMenu(data._id);
+                                  }}
                                   className="m-2 deletebtn-icon"
                                 >
                                   <i className="fa-solid fa-trash-can"></i>
@@ -158,11 +166,10 @@ function Menu() {
                                         Cancel
                                       </Button>
                                       <Button
-                                        disabled={disable}
-                                        onClick={() => {
-                                          deleteMenu(data._id);
-                                        }}
-                                        autoFocus
+                                      // disabled={disable}
+                                      // onClick={() => {
+                                      //   deleteMenu(data._id);
+                                      // }}
                                       >
                                         Delete
                                       </Button>

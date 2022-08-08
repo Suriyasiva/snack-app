@@ -92,6 +92,8 @@ function Users() {
       }
       if (!values.password) {
         errors.password = "Required";
+      } else if (values.password.length <= 6) {
+        errors.password = "invalid password !";
       }
       return errors;
     },
@@ -107,6 +109,7 @@ function Users() {
   const handleDelete = async (id) => {
     try {
       setDisable(true);
+      await console.log(id);
       await contextValues.deleteUser(id);
       await contextValues.userData();
       setOpen(false);
@@ -350,7 +353,11 @@ function Users() {
                                     <i className="fa-solid fa-pen-to-square"></i>
                                   </Link>
                                   <button
-                                    onClick={handleClickOpen}
+                                    disabled={disable}
+                                    onClick={() => {
+                                      console.log(user._id);
+                                      handleDelete(user._id);
+                                    }}
                                     className="m-2 deletebtn-icon"
                                   >
                                     <i className="fa-solid fa-trash-can"></i>
@@ -376,10 +383,9 @@ function Users() {
                                         </Button>
                                         <Button
                                           disabled={disable}
-                                          onClick={() => {
-                                            handleDelete(user._id);
-                                          }}
-                                          autoFocus
+                                          // onClick={() => {
+                                          // handleDelete(user._id);
+                                          // }}
                                         >
                                           Delete
                                         </Button>
