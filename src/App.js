@@ -22,12 +22,8 @@ function App() {
   // -----
   let authenticate = async () => {
     try {
-      let checkToken = await contextData.lookUp(
-        window.localStorage.getItem("app_token")
-      );
-      console.log(checkToken, "token role");
-      console.log("--check1--");
-      if (checkToken.role == "user" && checkPath) {
+      let checkToken = await contextData.lookUp();
+      if (checkToken.role === "user" && checkPath) {
         console.log("--check2--");
         navigate("/");
       } else {
