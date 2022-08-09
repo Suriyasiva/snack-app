@@ -22,14 +22,14 @@ function App() {
   // -----
   let authenticate = async () => {
     try {
-      let checkToken = await contextData.lookUp();
-      if (checkToken.role === "user" && checkPath) {
-        console.log("--check2--");
-        navigate("/");
-      } else {
-        setLoader(true);
+      if (window.localStorage.getItem("app_token")) {
+        let checkToken = await contextData.lookUp();
+        if (checkToken.role === "user" && checkPath) {
+          navigate("/");
+        } else {
+          setLoader(true);
+        }
       }
-      console.log("--check3--");
     } catch (error) {
       console.log("lookup error", error);
       navigate("/");
