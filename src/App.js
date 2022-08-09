@@ -40,7 +40,7 @@ function App() {
     if (token) {
       authenticate();
     } else {
-      console.log("no token");
+      setLoader(false);
     }
   }, [token]);
   return (
