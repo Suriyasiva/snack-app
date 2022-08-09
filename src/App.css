@@ -16,7 +16,13 @@
   .tool-bar {
     display: none;
   }
+  .home-component {
+    display: none;
+  }
   .material-drawer {
+    display: block;
+  }
+  .admin-drawer-component {
     display: block;
   }
   .user-background {
@@ -35,7 +41,13 @@
   .tool-bar {
     display: none;
   }
+  .home-component {
+    display: none;
+  }
   .material-drawer {
+    display: block;
+  }
+  .admin-drawer-component {
     display: block;
   }
   .user-background {
@@ -54,7 +66,13 @@
   .tool-bar {
     display: block;
   }
+  .home-component {
+    display: block;
+  }
   .material-drawer {
+    display: none;
+  }
+  .admin-drawer-component {
     display: none;
   }
   .user-background {

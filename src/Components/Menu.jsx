@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Provider, { providerContext } from "../Providers/Provider";
 import axios from "axios";
@@ -69,10 +68,6 @@ function Menu() {
   };
   return (
     <>
-      {/* <Routes>
-        <Route path="/editMenu/:id" element={<EditMenu />} />
-        <Route path="/createMenu" element={<CreateMenu />} />
-      </Routes> */}
       <div className="container-fluid ">
         <div className="row">
           <div className="col-sm-12">
