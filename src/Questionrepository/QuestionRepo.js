@@ -15,7 +15,8 @@ export async function lookUp(token) {
     );
     return isValidtoken.data;
   } catch (error) {
-    console.log("--lookup-error--", error);
+    console.log(error, "lookup error");
+    throw Error(error);
   }
 }
 
