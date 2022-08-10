@@ -18,8 +18,6 @@ function App() {
   let navigate = useNavigate();
   let [loader, setLoader] = useState(false);
   let token = window.localStorage.getItem("app_token");
-
-  const [spinner, setSpinner] = React.useState(false);
   // -----
   let authenticate = async () => {
     try {
@@ -28,7 +26,6 @@ function App() {
         if (checkToken.role === "user" && checkPath) {
           navigate("/");
         } else {
-          setSpinner(false);
           setLoader(true);
         }
       }
@@ -40,27 +37,22 @@ function App() {
   useEffect(() => {
     setLoader(false);
     if (token) {
-      setSpinner(true);
-      authenticate();
+      // authenticate();
+      setLoader(true);
     } else {
       setLoader(false);
     }
   }, [token]);
   return (
     <>
-      {/*  */}
-      {spinner ? (
-        <CircularProgress />
-      ) : (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/user/*" element={<User loader={loader} />} />
-          <Route path="/admin/*" element={<Admin loader={loader} />} />
-          <Route path="/dummyPage" element={<DummyPage />} />
-          <Route path="/newComponent" element={<NewComponent />} />
-          <Route path="*" element={<Page404 />} />
-        </Routes>
-      )}
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/user/*" element={<User loader={loader} />} />
+        <Route path="/admin/*" element={<Admin loader={loader} />} />
+        <Route path="/dummyPage" element={<DummyPage />} />
+        <Route path="/newComponent" element={<NewComponent />} />
+        <Route path="*" element={<Page404 />} />
+      </Routes>
     </>
   );
 }
