@@ -45,20 +45,20 @@ function App() {
   }, [token]);
   return (
     <>
-      {loader ? (
-        <Routes>
-          <Route exact path="/" element={<Login />} />
-          <Route exact path="/user/*" element={<User loader={loader} />} />
-          <Route exact path="/admin/*" element={<Admin loader={loader} />} />
+      {/* {loader ? ( */}
+      <Routes>
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/user/*" element={<User loader={loader} />} />
+        <Route exact path="/admin/*" element={<Admin loader={loader} />} />
 
-          <Route exact path="/newComponent" element={<NewComponent />} />
-          <Route exact path="*" element={<Page404 />} />
-        </Routes>
-      ) : (
+        <Route exact path="/newComponent" element={<NewComponent />} />
+        <Route exact path="*" element={<Page404 />} />
+      </Routes>
+      {/* ) : (
         <Routes>
           <Route exact path="/dummyPage" element={<DummyPage />} />
         </Routes>
-      )}
+      )} */}
     </>
   );
 }
