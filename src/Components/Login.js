@@ -86,7 +86,6 @@ function Login() {
     },
   });
   useEffect(() => {
-    console.log("iam alert disabler");
     if (activateAlert) {
       setTimeout(() => {
         setActivateAlert(false);
