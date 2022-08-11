@@ -47,16 +47,16 @@ function App() {
     <>
       {loader ? (
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/user/*" element={<User loader={loader} />} />
-          <Route path="/admin/*" element={<Admin loader={loader} />} />
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/user/*" element={<User loader={loader} />} />
+          <Route exact path="/admin/*" element={<Admin loader={loader} />} />
 
-          <Route path="/newComponent" element={<NewComponent />} />
-          <Route path="*" element={<Page404 />} />
+          <Route exact path="/newComponent" element={<NewComponent />} />
+          <Route exact path="*" element={<Page404 />} />
         </Routes>
       ) : (
         <Routes>
-          <Route path="/dummyPage" element={<DummyPage />} />
+          <Route exact path="/dummyPage" element={<DummyPage />} />
         </Routes>
       )}
     </>
