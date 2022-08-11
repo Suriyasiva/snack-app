@@ -9,58 +9,58 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { authenticateToken } from "./Providers/Auth";
 import DummyPage from "./Components/DummyPage";
 import NewComponent from "./Components/NewComponent";
+import MainRoute from "./routes/main_route";
+import AuthProvider from "./Providers/AuthProvider";
 
 function App() {
-  let location = useLocation();
-  let path = location.pathname;
-  let checkPath = path.startsWith("/admin");
-  let contextData = useContext(authenticateToken);
-  let navigate = useNavigate();
-  let [loader, setLoader] = useState(false);
-  let token = window.localStorage.getItem("app_token");
-  // -----
-  let authenticate = async () => {
-    try {
-      if (window.localStorage.getItem("app_token")) {
-        let checkToken = await contextData.lookUp();
-        if (checkToken.role === "user" && checkPath) {
-          navigate("/");
-        } else {
-          setLoader(true);
-        }
-      }
-    } catch (error) {
-      console.log("lookup error", error);
-      navigate("/");
-    }
-  };
-  useEffect(() => {
-    setLoader(false);
-    if (token) {
-      authenticate();
-      setLoader(true);
-    } else {
-      setLoader(false);
-    }
-  }, [token]);
   return (
-    <>
-      {/* {loader ? ( */}
-      <Routes>
-        <Route exact path="/" element={<Login />} />
-        <Route exact path="/user/*" element={<User loader={loader} />} />
-        <Route exact path="/admin/*" element={<Admin loader={loader} />} />
-
-        <Route exact path="/newComponent" element={<NewComponent />} />
-        <Route exact path="*" element={<Page404 />} />
-      </Routes>
-      {/* ) : (
-        <Routes>
-          <Route exact path="/dummyPage" element={<DummyPage />} />
-        </Routes>
-      )} */}
-    </>
+    <AuthProvider>
+      <MainRoute />
+    </AuthProvider>
   );
+  // let location = useLocation();
+  // let path = location.pathname;
+  // let checkPath = path.startsWith("/admin");
+  // let contextData = useContext(authenticateToken);
+  // let navigate = useNavigate();
+  // let [loader, setLoader] = useState(false);
+  // let token = window.localStorage.getItem("app_token");
+  // // -----
+  // let authenticate = async () => {
+  //   try {
+  //     if (window.localStorage.getItem("app_token")) {
+  //       let checkToken = await contextData.lookUp();
+  //       if (checkToken.role === "user" && checkPath) {
+  //         navigate("/");
+  //       } else {
+  //         setLoader(true);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log("lookup error", error);
+  //     // navigate("/");/
+  //   }
+  // };
+  // useEffect(() => {
+  //   setLoader(false);
+  //   if (token) {
+  //     authenticate();
+  //     setLoader(true);
+  //   } else {
+  //     setLoader(false);
+  //   }
+  // }, [token]);
+  // return (
+  //   <>
+  //     <Routes>
+  //       <Route exact path="/" element={<Login />} />
+  //       <Route path="/user/*" element={<User loader={loader} />} />
+  //       <Route path="/admin/*" element={<Admin loader={loader} />} />
+  //       <Route exact path="/newComponent" element={<NewComponent />} />
+  //       <Route path="*" element={<Page404 />} />
+  //     </Routes>
+  //   </>
+  // );
 }
 
 export default App;

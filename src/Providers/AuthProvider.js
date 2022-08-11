@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   getUserData,
   deleteUser,
@@ -6,11 +6,34 @@ import {
   singleUser,
   editUser,
   login,
+  lookUp,
 } from "../Questionrepository/QuestionRepo";
-export const authProviderContext = React.createContext(" ");
+export const authProviderContext = React.createContext({
+  isAuthDetermined: false,
+  isAuthenticated: false,
+  userLookup: async () => {},
+});
 function AuthProvider(props) {
+  const [isAuthDetermined, setAuthDetermined] = useState(false);
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [user, setUser] = React.useState([]);
   const [singleUserData, setSingleUserData] = React.useState({});
+
+  const userLookup = async () => {
+    console.log("lookupcalled");
+    try {
+      const response = await lookUp();
+      console.log("response", response);
+      setAuthenticated(true);
+    } catch (e) {
+      console.log("e", e);
+      //navigate to login screen
+      setAuthenticated(false);
+    } finally {
+      setAuthDetermined(true);
+    }
+  };
+
   let userData = () => {
     getUserData()
       .then((res) => {
@@ -39,6 +62,10 @@ function AuthProvider(props) {
     singleUserData: singleUserData,
     editUser: editUser,
     login: login,
+
+    isAuthDetermined,
+    isAuthenticated,
+    userLookup,
   };
   return (
     <>
