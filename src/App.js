@@ -14,14 +14,6 @@ import AuthProvider from "./Providers/AuthProvider";
 
 function App() {
   return (
-    <Routes>
-      <Route exact path={"page"} element={<span>Page 01</span>} />
-      <Route exact path={"page-02"} element={<span>Page 02</span>} />
-
-      <Route path="*" element={<Page404 />} />
-    </Routes>
-  );
-  return (
     <AuthProvider>
       <MainRoute />
     </AuthProvider>
