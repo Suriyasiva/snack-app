@@ -764,7 +764,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .progress-loader {
-  width: 150px;
+  width: 70px;
   background: rgba(236, 236, 238, 0.253);
   height: 3px;
   border-radius: 7px;
