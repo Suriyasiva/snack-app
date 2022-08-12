@@ -28,7 +28,7 @@ function AuthProvider(props) {
       console.log(response, "response");
       isAllow(response);
     } catch (e) {
-      console.log("lookup error :>>", e);
+      // console.log("lookup error :>>", e);
       //navigate to login screen
       setAuthenticated(false);
     } finally {

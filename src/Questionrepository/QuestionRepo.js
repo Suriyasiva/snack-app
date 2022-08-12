@@ -15,7 +15,6 @@ export async function lookUp(token) {
     );
     return isValidtoken.data;
   } catch (error) {
-    console.log(error, "lookup error");
     throw Error(error);
   }
 }
@@ -29,7 +28,6 @@ export async function login(data) {
     );
     return token;
   } catch (error) {
-    console.log("--login-error--", error);
     throw error;
     // return error;
   }
