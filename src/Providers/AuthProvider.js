@@ -23,10 +23,11 @@ function AuthProvider(props) {
     console.log("lookupcalled");
     try {
       const response = await lookUp();
+      console.log("lookupsuccess");
       console.log("response", response);
       setAuthenticated(true);
     } catch (e) {
-      console.log("e", e);
+      console.log("lookup error :>>", e);
       //navigate to login screen
       setAuthenticated(false);
     } finally {

@@ -198,10 +198,6 @@ function UserEdit() {
 }
 
 let userEditProvider = () => {
-  return (
-    <AuthProvider>
-      <UserEdit />
-    </AuthProvider>
-  );
+  return <UserEdit />;
 };
 export default userEditProvider;

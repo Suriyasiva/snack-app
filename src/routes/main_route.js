@@ -10,6 +10,7 @@ const MainRoute = (props) => {
   const authContext = useContext(authProviderContext);
   const { isAuthDetermined, isAuthenticated } = authContext;
 
+  console.log(isAuthenticated, "isAuthenticated");
   const navigate = useNavigate();
 
   useEffect(() => {

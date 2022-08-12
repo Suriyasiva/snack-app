@@ -419,10 +419,6 @@ function Users() {
   );
 }
 let UsersProvider = (prop) => {
-  return (
-    <AuthProvider>
-      <Users />
-    </AuthProvider>
-  );
+  return <Users />;
 };
 export default UsersProvider;

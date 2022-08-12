@@ -36,7 +36,7 @@ function Login() {
           "app_token",
           generateToken.data.credentials.token
         );
-
+        await contextValues.userLookup();
         let decode = jwt_decode(generateToken.data.credentials.token);
         if (decode.role === "admin") {
           window.localStorage.setItem(
@@ -44,7 +44,9 @@ function Login() {
             generateToken.data.credentials.userName
           );
           window.localStorage.setItem("userRole", decode.role);
-          navigate("/admin/home");
+          setTimeout(() => {
+            navigate("/admin/home");
+          }, 2000);
         } else {
           window.localStorage.setItem(
             "userName",
@@ -55,7 +57,9 @@ function Login() {
             generateToken.data.credentials.id
           );
           window.localStorage.setItem("userRole", decode.role);
-          navigate("/user/home");
+          setTimeout(() => {
+            navigate("/user/home");
+          }, 2000);
         }
         resetForm();
       } catch (error) {
@@ -221,10 +225,6 @@ function Login() {
 }
 
 let LoginProvider = () => {
-  return (
-    <AuthProvider>
-      <Login />
-    </AuthProvider>
-  );
+  return <Login />;
 };
 export default LoginProvider;

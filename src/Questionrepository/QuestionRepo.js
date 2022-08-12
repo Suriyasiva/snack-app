@@ -2,7 +2,7 @@ const axios = require("axios").default;
 
 // lookup--
 export async function lookUp(token) {
-  // console.log(token, "token");
+  console.log("lookup ");
   try {
     let isValidtoken = await axios.post(
       "https://tesark-server.herokuapp.com/lookUp/authToken",
