@@ -18,6 +18,7 @@ function App() {
       <MainRoute />
     </AuthProvider>
   );
+  // --------------------------------------
   // let location = useLocation();
   // let path = location.pathname;
   // let checkPath = path.startsWith("/admin");
@@ -64,4 +65,3 @@ function App() {
 }
 
 export default App;
-// import Home from "./Components/Home";

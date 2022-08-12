@@ -20,7 +20,7 @@ const MainRoute = (props) => {
         // navigate("/user/home");
       }
     }
-  }, [isAuthDetermined, authContext.isAuthenticated]);
+  }, [isAuthDetermined, isAuthenticated]);
 
   useEffect(() => {
     console.log("useffect called");
@@ -28,6 +28,7 @@ const MainRoute = (props) => {
   }, []);
 
   const renderRoutes = (routes, keyPrefix = "auth-route") => {
+    console.log(routes, "render routes");
     return routes.map((a) => {
       if (a.routes) {
         return (

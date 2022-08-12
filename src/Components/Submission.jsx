@@ -165,7 +165,7 @@ function Submission() {
             </DialogActions>
           </Dialog>
         </div>
-        <div className="row">
+        <div className="row mt-2">
           <div className="col-sm-12 table-container">
             <div class="bd-example mt-1">
               <table class="table table-hover">

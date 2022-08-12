@@ -1,11 +1,12 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import User from "../Components/Users";
+import UserProvider from "../Components/User";
+// import User from "../Components/Users";
 
 const UserRoute = (props) => {
   return (
     <Routes path="/user">
-      <Route exact path={"/home"} component={<User />} />
+      <Route exact path={"/home"} component={<UserProvider />} />
     </Routes>
   );
 };

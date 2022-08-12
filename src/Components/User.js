@@ -192,14 +192,14 @@ function User(props) {
   }, [contextValues.userSubmissions]);
   let logOut = () => {
     window.localStorage.clear();
-    navigate("/");
+    navigate("/login");
   };
 
   let navigate = useNavigate();
   const [drawerOPen, setDrawerOPen] = React.useState(false);
   return (
     <>
-      {props.loader ? (
+      {!props.loader ? (
         <>
           <div className="container-fluid user-background">
             {/* -----------------------------------top bar----------------------------------- */}

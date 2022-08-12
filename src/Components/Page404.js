@@ -8,7 +8,8 @@ function Page404() {
         <div className="row ">
           <div className="col-lg-12 d-flex justify-content-center align-item-center ">
             <img
-              className="img-fluid mt-2 erro-svg"
+              style={{ height: "100vh" }}
+              className="img-fluid "
               src={errorPage}
               alt="error-404"
             ></img>

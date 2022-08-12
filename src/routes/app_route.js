@@ -1,13 +1,13 @@
 import React from "react";
 import Admin from "../Components/Admin";
-import UsersProvider from "../Components/Users";
+import UserProvider from "../Components/User";
 import { adminRoutes } from "./admin_route";
 
 export const appRoutes = [
   {
     route: "/user/home",
     exact: true,
-    component: <UsersProvider />,
+    component: <UserProvider />,
   },
 
   // admin routes
@@ -16,9 +16,4 @@ export const appRoutes = [
     layout: <Admin />,
     subRoutes: adminRoutes,
   },
-  // {
-  //   route: "/admin/menu",
-  //   exact: true,
-  //   component: <MenuP />,
-  // },
 ];

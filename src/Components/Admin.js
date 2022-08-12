@@ -25,7 +25,7 @@ function Admin(props) {
 
   let logOut = async () => {
     await window.localStorage.clear();
-    navigate("/");
+    navigate("/login");
   };
   const [drawerOPen, setDrawerOPen] = React.useState(false);
   return (

@@ -55,7 +55,7 @@ function Login() {
             generateToken.data.credentials.id
           );
           window.localStorage.setItem("userRole", decode.role);
-          navigate("/user");
+          navigate("/user/home");
         }
         resetForm();
       } catch (error) {
