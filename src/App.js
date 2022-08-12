@@ -22,11 +22,6 @@ function App() {
   // let location = useLocation();
   // let path = location.pathname;
   // let checkPath = path.startsWith("/admin");
-  // let contextData = useContext(authenticateToken);
-  // let navigate = useNavigate();
-  // let [loader, setLoader] = useState(false);
-  // let token = window.localStorage.getItem("app_token");
-  // // -----
   // let authenticate = async () => {
   //   try {
   //     if (window.localStorage.getItem("app_token")) {
@@ -38,7 +33,6 @@ function App() {
   //       }
   //     }
   //   } catch (error) {
-  //     console.log("lookup error", error);
   //     // navigate("/");/
   //   }
   // };

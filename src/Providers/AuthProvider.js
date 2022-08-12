@@ -8,6 +8,8 @@ import {
   login,
   lookUp,
 } from "../Questionrepository/QuestionRepo";
+import { useLocation } from "react-router-dom";
+
 export const authProviderContext = React.createContext({
   isAuthDetermined: false,
   isAuthenticated: false,
@@ -23,15 +25,27 @@ function AuthProvider(props) {
     console.log("lookupcalled");
     try {
       const response = await lookUp();
-      console.log("lookupsuccess");
-      console.log("response", response);
-      setAuthenticated(true);
+      console.log(response, "response");
+      isAllow(response);
     } catch (e) {
       console.log("lookup error :>>", e);
       //navigate to login screen
       setAuthenticated(false);
     } finally {
       setAuthDetermined(true);
+    }
+  };
+
+  let location = useLocation();
+  let path = location.pathname;
+  console.log(path, "path");
+  let checkPath = path.startsWith("/admin");
+
+  let isAllow = async (res) => {
+    if (res.role === "user" && checkPath) {
+      new Error("not allowed to this page");
+    } else {
+      setAuthenticated(true);
     }
   };
 

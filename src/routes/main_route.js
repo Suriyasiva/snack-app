@@ -17,8 +17,6 @@ const MainRoute = (props) => {
     if (isAuthDetermined) {
       if (!authContext.isAuthenticated) {
         navigate("/login");
-      } else {
-        // navigate("/user/home");
       }
     }
   }, [isAuthDetermined, isAuthenticated]);

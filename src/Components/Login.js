@@ -61,7 +61,6 @@ function Login() {
             navigate("/user/home");
           }, 2000);
         }
-        resetForm();
       } catch (error) {
         resetForm();
         setLoginBtnLoader(false);
